@@ -1,0 +1,157 @@
+﻿<Window x:Class="ProjectManager.EditTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectManager"
+        xmlns:system="clr-namespace:System;assembly=netstandard"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+ Title="EditTaskPage" Height="675" Width="700" ResizeMode="NoResize">
+    <Window.Resources>
+        <DataTemplate x:Key="ProjectUserTemplate">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="3" Height="85" Background="AliceBlue" MouseLeftButtonDown="EditUserChose" CornerRadius="15" Cursor="Hand" Tag="{Binding}"  >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="1.45*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Margin="3" CornerRadius="100" Height="50" Width="50" Background="RoyalBlue">
+                        <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding FirstWord}"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical">
+                        <TextBlock Text="{Binding User.Fullname}"/>
+                        <TextBlock Text="{Binding User.Username}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <TextBlock Text="👨‍💼"/>
+                            <TextBlock Text="{Binding Role.Title}"/>
+                        </StackPanel>
+
+                        <Grid Margin="5" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColorTemplate">
+            <Border Style="{StaticResource ShadowBorder}" CornerRadius="10" Height="50" Width="50" Margin="5" MouseLeftButtonDown="EditChoseColor" Background="{Binding}" Tag="{Binding}" Cursor="Hand"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Border  Background="White" Style="{StaticResource ShadowBorder}"  >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.75*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border VerticalAlignment="Center" Grid.Column="2" Style="{StaticResource MainBorder}">
+                <ScrollViewer MaxHeight="650" Style="{StaticResource HistoryScrollViewer}">
+                    <ItemsControl ItemsSource="{Binding projectUsersService.ProjectUsers}" ItemTemplate="{StaticResource ProjectUserTemplate}" HorizontalContentAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel>
+                                    
+                                </StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+            <StackPanel Grid.Column="0">
+                <Border Padding="15" CornerRadius="15" Margin="10" Background="White" Style="{StaticResource ShadowBorder}">
+                    <TextBlock  FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" x:Name="PopupTitle" Text="{Binding TitleWindow}"/>
+                </Border>
+                <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📋 Название задачи"/>
+                    <Border Style="{StaticResource ShadowBorder}">
+                        <TextBox  Margin="5" Text="{Binding taskHistory.Data.Title}"></TextBox>
+                    </Border>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📋 Описание задачи"/>
+                    <Border Style="{StaticResource ShadowBorder}">
+                        <TextBox TextWrapping="Wrap" Height="50" MaxWidth="250" Margin="5" Text="{Binding taskHistory.Data.Description}"></TextBox>
+                    </Border>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📅 Срок сдачи"/>
+                    <Border Style="{StaticResource ShadowBorder}">
+                        <DatePicker
+        SelectedDate="{Binding taskHistory.Data.DueDate}"
+        DisplayDateStart="{x:Static system:DateTime.Today}"
+        FirstDayOfWeek="Monday"
+        IsTodayHighlighted="True"
+        SelectedDateFormat="Short"
+                            Text="Выберите дату"
+        FontSize="14"
+        Margin="5"
+        VerticalContentAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📋 Выбор статуса и приоритета"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="5" Grid.Column="0" Orientation="Vertical">
+                            <TextBlock HorizontalAlignment="Center" Text="Статус"></TextBlock>
+                            <ComboBox Text="{Binding taskHistory.Data.Status.Title}" ItemsSource="{Binding tasksService.Statuses}"
+DisplayMemberPath="Title"
+SelectedValuePath="Id"
+SelectedValue="{Binding statusId}"
+IsEditable="True" Margin="0,5" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="5" Grid.Column="2" Orientation="Vertical">
+                            <TextBlock HorizontalAlignment="Center" Text="Приоритет"></TextBlock>
+                            <ComboBox Text="{Binding taskHistory.Data.Priority.Title}" ItemsSource="{Binding tasksService.Priorities}"
+DisplayMemberPath="Title"
+SelectedValuePath="Id"
+SelectedValue="{Binding priorityId}"
+IsEditable="True" Margin="0,5" IsReadOnly="True"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="🔴 Выбранный цвет "/>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding ColorsCollection}" ItemTemplate="{StaticResource ColorTemplate}" HorizontalContentAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel MaxWidth="250">
+
+                                </WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel x:Name="CreateHints">
+                    <TextBlock TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="150" Text="{Binding HintWindow}"/>
+                </StackPanel>
+                <StackPanel x:Name="EditHints">
+                    <StackPanel HorizontalAlignment="Center"  Orientation="Horizontal">
+                        <TextBlock Text="🕐 Последнее обновление "></TextBlock>
+                        <TextBlock Text="{Binding taskHistory.TimeAgo, StringFormat={}{0:HH:mm dd/MM/yyyy}}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <Button Margin="5" Click="Execute" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
+                <Button Margin="5" Click="Back" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

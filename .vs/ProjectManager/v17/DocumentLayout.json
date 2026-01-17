@@ -1,0 +1,202 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\taskpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\taskpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\taskpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\taskpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\projectuserpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\projectuserpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\models\\taskshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\models\\taskshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\projectpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\projectpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\edittaskwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\edittaskwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\edittaskwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\edittaskwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\projectpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\projectpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|c:\\\u0443\u0447\u0435\u0431\u0430\\projectmanager\\projectmanager\\pages\\projectuserspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7A5FCC93-7E7A-4CAB-89E7-026237B90412}|ProjectManager\\ProjectManager.csproj|solutionrelative:projectmanager\\pages\\projectuserspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TaskPage.xaml",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\TaskPage.xaml",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\TaskPage.xaml",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\TaskPage.xaml",
+              "RelativeToolTip": "ProjectManager\\Pages\\TaskPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-16T16:47:53.78Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProjectUserPage.xaml.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectUserPage.xaml.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\ProjectUserPage.xaml.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectUserPage.xaml.cs",
+              "RelativeToolTip": "ProjectManager\\Pages\\ProjectUserPage.xaml.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAADAAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T16:47:00.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TaskPage.xaml.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\TaskPage.xaml.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\TaskPage.xaml.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\TaskPage.xaml.cs",
+              "RelativeToolTip": "ProjectManager\\Pages\\TaskPage.xaml.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T16:46:06.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TasksHistory.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Models\\TasksHistory.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\Models\\TasksHistory.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Models\\TasksHistory.cs",
+              "RelativeToolTip": "ProjectManager\\Models\\TasksHistory.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAowGIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T15:17:05.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EditTaskWindow.xaml.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\EditTaskWindow.xaml.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\EditTaskWindow.xaml.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\EditTaskWindow.xaml.cs",
+              "RelativeToolTip": "ProjectManager\\EditTaskWindow.xaml.cs",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAYwKkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:48:36.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainPage.xaml.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\MainPage.xaml.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\MainPage.xaml.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\MainPage.xaml.cs",
+              "RelativeToolTip": "ProjectManager\\Pages\\MainPage.xaml.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAFQAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T15:50:19.132Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProjectPage.xaml",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectPage.xaml",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\ProjectPage.xaml",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectPage.xaml",
+              "RelativeToolTip": "ProjectManager\\Pages\\ProjectPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-16T15:03:08.128Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainPage.xaml",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\MainPage.xaml",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\MainPage.xaml",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\MainPage.xaml",
+              "RelativeToolTip": "ProjectManager\\Pages\\MainPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-16T16:32:01.327Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "EditTaskWindow.xaml",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\EditTaskWindow.xaml",
+              "RelativeDocumentMoniker": "ProjectManager\\EditTaskWindow.xaml",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\EditTaskWindow.xaml",
+              "RelativeToolTip": "ProjectManager\\EditTaskWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-16T13:45:23.109Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ProjectPage.xaml.cs",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectPage.xaml.cs",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\ProjectPage.xaml.cs",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectPage.xaml.cs",
+              "RelativeToolTip": "ProjectManager\\Pages\\ProjectPage.xaml.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAYwFcAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T15:03:22.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProjectUsersPage.xaml",
+              "DocumentMoniker": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectUsersPage.xaml",
+              "RelativeDocumentMoniker": "ProjectManager\\Pages\\ProjectUsersPage.xaml",
+              "ToolTip": "C:\\\u0423\u0447\u0435\u0431\u0430\\ProjectManager\\ProjectManager\\Pages\\ProjectUsersPage.xaml",
+              "RelativeToolTip": "ProjectManager\\Pages\\ProjectUsersPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-16T14:14:55.291Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

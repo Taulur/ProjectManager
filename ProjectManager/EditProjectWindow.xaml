@@ -1,0 +1,63 @@
+﻿<Window x:Class="ProjectManager.EditProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectManager"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="EditProjectWindow" Height="575" Width="300" ResizeMode="NoResize">
+    <Window.Resources>
+        <DataTemplate x:Key="ColorTemplate">
+            <Border Style="{StaticResource ShadowBorder}" CornerRadius="10" Height="50" Width="50" Margin="5" MouseLeftButtonDown="EditChoseColor" Background="{Binding}" Tag="{Binding}" Cursor="Hand"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Style="{StaticResource ShadowBorder}"  >
+                    <StackPanel>
+                        <Border Padding="15" CornerRadius="15" Margin="10" Background="White" Style="{StaticResource ShadowBorder}">
+                            <TextBlock  FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" x:Name="PopupTitle" Text="{Binding TitleWindow}"/>
+                        </Border>
+                        <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📁 Название проекта"/>
+                            <Border Style="{StaticResource ShadowBorder}">
+                        <TextBox  Margin="5" Text="{Binding projectHistory.Data.Title}"></TextBox>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel>
+                    <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📋 Описание проекта"/>
+                            <Border Style="{StaticResource ShadowBorder}">
+                        <TextBox TextWrapping="Wrap" Height="50" MaxWidth="250" Margin="5" Text="{Binding projectHistory.Data.Description}"></TextBox>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="🔴 Выбранный цвет "/>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding ColorsCollection}" ItemTemplate="{StaticResource ColorTemplate}" HorizontalContentAlignment="Stretch">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel MaxWidth="250">
+
+                                        </WrapPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel x:Name="CreateHints">
+                            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="150" Text="{Binding HintWindow}"/>
+                        </StackPanel>
+                        <StackPanel x:Name="EditHints">
+                            <StackPanel HorizontalAlignment="Center"  Orientation="Horizontal">
+                        <TextBlock Text="🕐 Последнее обновление "></TextBlock>
+                        <TextBlock Text="{Binding projectHistory.TimeAgo, StringFormat={}{0:HH:mm dd/MM/yyyy}}"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Margin="5" Click="Execute" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
+                <Button Margin="5" Click="Back" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+            </StackPanel>
+                </Border>
+            </Grid>
+
+</Window>
