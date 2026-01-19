@@ -21,6 +21,8 @@ namespace ProjectManager.Pages
         public ObservableCollection<Models.Task> ActiveTasks { get; set; } = new();
         public ObservableCollection<Models.Task> CompletedTasks { get; set; } = new();
 
+        public int CommentsCount => Comments?.Count ?? 0;
+
         public int SelectedRoleId
         {
             get => ProjectUser?.RoleId ?? 0;
@@ -62,6 +64,13 @@ namespace ProjectManager.Pages
             RefreshTasks();
 
             InitializeComponent();
+
+            ProjectUser currentUser = Models.CurrentUser.ProjectUserByProject(projectUser.Project);
+            if (currentUser.Role.Title != "manager")
+            {
+                ActionGrid.Visibility = Visibility.Collapsed;
+            }
+
             DataContext = this;
         }
 

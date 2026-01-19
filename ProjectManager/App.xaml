@@ -9,10 +9,10 @@
             <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
                 <Setter Property="AutomationProperties.Name" Value="" />
             </Style>
-            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+            <Style TargetType="ComboBox" >
                 <Setter Property="AutomationProperties.Name" Value="" />
             </Style>
-            <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignDatePicker}">
+            <Style TargetType="DatePicker" >
                 <Setter Property="AutomationProperties.Name" Value="" />
             </Style>
             <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MaterialDesignTextBoxBase}">

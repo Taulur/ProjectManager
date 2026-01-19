@@ -26,6 +26,7 @@ namespace ProjectManager.Pages
             if (task == null) throw new ArgumentNullException(nameof(task));
 
             Task = task;
+
             var sortedHistories = task.TasksHistories
                 .OrderByDescending(h => h.CreatedAt)
                 .ToList();
@@ -43,6 +44,8 @@ namespace ProjectManager.Pages
 
             InitializeComponent();
             DataContext = this;
+
+            DbService.GetAll();
         }
 
         private void AddComment_Click(object sender, RoutedEventArgs e)
@@ -87,6 +90,8 @@ namespace ProjectManager.Pages
             window.ShowDialog();
             DbService.Commit();
             Task = DbService.Tasks.FirstOrDefault(t => t.Id == Task.Id);
+            NavigationService.Navigate(new ProjectPage(Task.Project));
+            NavigationService.Navigate(new TaskPage(Task));
         }
 
         private void RemoveTask_Click(object sender, RoutedEventArgs e)

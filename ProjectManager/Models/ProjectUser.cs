@@ -37,9 +37,6 @@ public partial class ProjectUser
     [NotMapped]
     public int TotalAssignedTasks => Tasks?.Count ?? 0;
 
-    /// <summary>
-    /// Количество оставшихся задач, которые надо выполнить
-    /// </summary>
     [NotMapped]
     public int RemainingTasksToComplete
     {
@@ -47,10 +44,7 @@ public partial class ProjectUser
         {
             if (TaskInformations == null) return 0;
 
-            // Предполагаем, что статусы с определенным ID являются завершенными
-            // Например, статус ID = 3 (или другой) означает "Выполнено"
-            // Вам нужно адаптировать эту логику под вашу систему статусов
-            const int completedStatusId = 6; // Измените на ваш ID статуса "Завершено"
+            const int completedStatusId = 6; 
 
             return TaskInformations
                 .Where(ti => ti.StatusId != completedStatusId && ti.AssignedtoId == Id)

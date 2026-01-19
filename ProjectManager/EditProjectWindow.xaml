@@ -54,8 +54,8 @@
                         <TextBlock Text="{Binding projectHistory.TimeAgo, StringFormat={}{0:HH:mm dd/MM/yyyy}}"></TextBlock>
                             </StackPanel>
                         </StackPanel>
-                        <Button Margin="5" Click="Execute" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
-                <Button Margin="5" Click="Back" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+                        <Button Margin="5" Click="Execute" Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
+                <Button Margin="5" Click="Back" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
             </StackPanel>
                 </Border>
             </Grid>

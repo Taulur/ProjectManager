@@ -50,8 +50,9 @@ namespace ProjectManager
             projectUsersService.GetAll(project);
 
             projectUser = CurrentUser.ProjectUserByProject(project);
-            MessageBox.Show(projectUser.User.Username);
             taskHistory.Projectuser = projectUser;
+
+         
 
             if (_task != null)
             {
@@ -70,10 +71,6 @@ namespace ProjectManager
                 };
 
                 taskHistory.CreatedAt = task.LastVersion.CreatedAt;
-                
-                
-               
-
                 isEdit = true;
 
                 TitleWindow = "Изменение задачи";
@@ -81,21 +78,104 @@ namespace ProjectManager
             }
             else
             {
+                selectedUser = GetBestAssignedUser(5);
                 taskHistory.Data = new();
                 taskHistory.Data.DueDate = DateTime.Now;
                 TitleWindow = "Создание задачи";
-                HintWindow = "";
+                HintWindow = $"Автоматически был выбран самый подходяший участник\nПользователь: {selectedUser.User.Username}\nФИО : {selectedUser.User.Fullname}";
             }
 
-
-
-
             InitializeComponent();
+            
+        }
+
+       
+        private ProjectUser GetBestAssignedUser(int targetPriorityId)
+        {
+
+            var candidates = project.ProjectUsers
+                .Where(pu => pu.Id != projectUser.Id && pu.Role.Title != "manager") 
+                .ToList();
+
+            if (candidates.Count == 1)
+            {
+                return candidates[0];
+            }
+
+            if (!candidates.Any())
+            {
+                return null; // Нет кандидатов
+                
+            }
+
+            int maxExperience = 0;
+            double maxTimeSinceLast = 0;
+            int maxLoad = 0;
+            var candidateData = new Dictionary<ProjectUser, (int load, int experience, double timeSinceLast)>();
+
+            DateTime now = DateTime.Now;
+
+            foreach (var user in candidates)
+            {
+                int load = user.RemainingTasksToComplete;
+
+                int experience = project.Tasks.Count(t =>
+                {
+                    var lastVersion = t.LastVersion?.Data;
+                    return lastVersion != null &&
+                           lastVersion.AssignedtoId == user.Id &&
+                           lastVersion.StatusId == 6 && 
+                           lastVersion.PriorityId == targetPriorityId;
+                });
+
+                DateTime? lastAssignmentTime = project.Tasks
+                    .SelectMany(t => t.TasksHistories)
+                    .Where(th => th.Data.AssignedtoId == user.Id)
+                    .Max(th => (DateTime?)th.CreatedAt);
+
+                double timeSinceLast = lastAssignmentTime.HasValue
+                    ? (now - lastAssignmentTime.Value).TotalDays
+                    : double.MaxValue / 2; 
+
+                candidateData[user] = (load, experience, timeSinceLast);
+
+                if (experience > maxExperience) maxExperience = experience;
+                if (timeSinceLast > maxTimeSinceLast) maxTimeSinceLast = timeSinceLast;
+                if (load > maxLoad) maxLoad = load;
+            }
+
+            const double weightLoad = 0.4;
+            const double weightExp = 0.3;
+            const double weightTime = 0.3;
+
+            ProjectUser bestUser = null;
+            double bestScore = double.MinValue;
+
+            foreach (var kvp in candidateData)
+            {
+                var user = kvp.Key;
+                var (load, experience, timeSinceLast) = kvp.Value;
+
+                double loadScore = maxLoad > 0 ? 1.0 - (load / (double)maxLoad) : 1.0;
+
+                double expScore = maxExperience > 0 ? experience / (double)maxExperience : 0.0;
+
+                double timeScore = maxTimeSinceLast > 0 ? timeSinceLast / maxTimeSinceLast : 1.0; 
+
+                double totalScore = (weightLoad * loadScore) + (weightExp * expScore) + (weightTime * timeScore);
+
+                if (totalScore > bestScore)
+                {
+                    bestScore = totalScore;
+                    bestUser = user;
+                }
+            }
+
+            return bestUser;
         }
 
         private void Execute(object sender, RoutedEventArgs e)
         {
-
 
             foreach (var status in tasksService.Statuses)
             {
@@ -114,10 +194,14 @@ namespace ProjectManager
                 }
             }
 
+   
+            if (!isEdit && selectedUser == null && priorityId != -1)
+            {
+                selectedUser = GetBestAssignedUser(priorityId);
+            }
+
             if (isEdit)
             {
-
-
 
                 TaskInformation data = new TaskInformation
                 {
@@ -129,8 +213,6 @@ namespace ProjectManager
                     Assignedto = selectedUser,
                     Color = selectedColor,
 
-
-
                 };
 
                 TasksHistory newTaskHistory = new TasksHistory
@@ -138,6 +220,7 @@ namespace ProjectManager
                     Action = tasksService.Actions[1],
                     Task = task,
                     Data = data,
+                    Projectuser = projectUser,
                     CreatedAt = DateTime.Now,
                 };
 
@@ -148,9 +231,6 @@ namespace ProjectManager
 
                 if (statusId != -1 && priorityId != -1)
                 {
-
-                    // В ИСТОРИЮ ИЗМЕНЕНИЯ ТОТ КТО ИЗМЕНИЛ ЗАНОСИТСЯ ПОКА ЧТО ПЕРВЫЙ УЧАСТНИК из всех ПРОЕКТов
-
                     taskHistory.Action = tasksService.Actions[0];
                     taskHistory.Task = task;
                     taskHistory.CreatedAt = DateTime.Now;
@@ -160,7 +240,6 @@ namespace ProjectManager
                     task.CreatedAt = DateTime.Now;
                     task.Project = project;
 
-
                     tasksService.Add(taskHistory);
 
                 }
@@ -169,9 +248,8 @@ namespace ProjectManager
             this.Close();
 
         }
-          
-           
-        
+
+
 
         private void Back(object sender, RoutedEventArgs e)
         {

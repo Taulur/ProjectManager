@@ -7,7 +7,6 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1250"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}"
       Title="ProjectPage">
     <Page.Resources>
         <DataTemplate x:Key="HistoryTemplate">
@@ -196,7 +195,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <Button Height="50" FontSize="20"  Cursor="Hand" Click="ProjectsPage" Content="📂 Проекты"/>
-                    <Button Height="50" FontSize="20"  Cursor="Hand" Click="ShowProjectUsers" Content="👥 Участники"/>
+                    <Button Height="50" FontSize="20" x:Name="ProjectUsersButton"  Cursor="Hand" Click="ShowProjectUsers" Content="👥 Участники"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Height="50" FontSize="20"  Click="BackToMain" Cursor="Hand"  Content="↶ Вернуться"/>
@@ -213,7 +212,7 @@
                 <Label Style="{StaticResource ProjectsTitle}" Content="Задачи : "/>
                 <Label Margin="0,5,5,5" FontSize="17" FontWeight="SemiBold" Content="{Binding TasksCount}"/>
             </StackPanel>
-            <Button Grid.Column="1" Cursor="Hand" Click="AddTask" HorizontalAlignment="Left" Content="➕ Новая задача"/>
+            <Button Grid.Column="1" x:Name="AddButton" Cursor="Hand" Click="AddTask" HorizontalAlignment="Left" Content="➕ Новая задача"/>
         </Grid>
         <Grid Margin="3">
             <Grid.ColumnDefinitions>
@@ -224,17 +223,45 @@
                 <ColumnDefinition Width="1.35*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-
-            <Border Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
+            <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                    <TextBox x:Name="tasksBox" Width="150"  TextChanged="tasksBox_TextChanged" Text="{Binding TasksSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="12" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                    <Border Margin="3" Grid.Row="1" Grid.Column="0" Padding="3" BorderBrush="RoyalBlue" BorderThickness="1" CornerRadius="5"  >
+                        <ComboBox x:Name="tasksCombo" SelectionChanged="tasksCombo_SelectionChanged" VerticalAlignment="Center" FontSize="10" Width="100" BorderThickness="0" ItemsSource="{Binding TasksFilter}" IsEditable="False" Margin="0,5"/>
+                    </Border>
+                    <Button Click="Button_Click_2" Height="25" Width="50" VerticalAlignment="Center" Margin="3" >
+                        <materialDesign:PackIcon Height="20" Width="20" Kind="Refresh" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
                 <StackPanel>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <Label Style="{StaticResource ProjectsTitle}" Content="Участники проекта :"/>
                         <Label Style="{StaticResource ProjectsTitle}" Content="{Binding ProjectUsersCount}"/>
                     </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                            <TextBox x:Name="usersBox" Width="150"  TextChanged="usersBox_TextChanged" Text="{Binding UsersSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="12" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                            <Border Margin="3" Grid.Row="1" Grid.Column="0" Padding="3" BorderBrush="RoyalBlue" BorderThickness="1" CornerRadius="5"  >
+                                <ComboBox x:Name="usersCombo" SelectionChanged="usersCombo_SelectionChanged" VerticalAlignment="Center" FontSize="10" Width="100" BorderThickness="0" ItemsSource="{Binding UsersFilter}" IsEditable="False" Margin="0,5"/>
+                            </Border>
+                            <Button Click="Button_Click" Height="25" Width="50" VerticalAlignment="Center" Margin="3" >
+                                <materialDesign:PackIcon Height="20" Width="20" Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
                     <ItemsControl 
-ItemsSource="{Binding ProjectUsers}" 
+ItemsSource="{Binding usersView}" 
 ItemTemplate="{StaticResource UserTemplate}"
 HorizontalContentAlignment="Stretch">
                         <ItemsControl.ItemsPanel>
@@ -247,14 +274,14 @@ HorizontalContentAlignment="Stretch">
                     </ItemsControl>
                 </StackPanel>
             </Border>
-            <Border Grid.Column="1" Style="{StaticResource MainBorder}">
+            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource MainBorder}">
                 <StackPanel>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="3" CornerRadius="10" Background="RoyalBlue">
                         <TextBlock FontWeight="Bold" Margin="3" Text="Ожидание" HorizontalAlignment="Center" Foreground="White"/>
                     </Border>
                     <ScrollViewer Height="450" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                         <ItemsControl 
-ItemsSource="{Binding WaitingTasks}" 
+ItemsSource="{Binding tasksWaitingView}" 
 ItemTemplate="{StaticResource TaskCardTemplate}"
 HorizontalContentAlignment="Stretch">
                             <ItemsControl.ItemsPanel>
@@ -268,14 +295,14 @@ HorizontalContentAlignment="Stretch">
                     </ScrollViewer>
                 </StackPanel>
             </Border>
-            <Border Grid.Column="2" Style="{StaticResource MainBorder}">
+            <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource MainBorder}">
                 <StackPanel>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="10" Background="Orange">
                         <TextBlock FontWeight="Bold" Margin="3" Text="Выполняются" HorizontalAlignment="Center" Foreground="White"/>
                     </Border>
                     <ScrollViewer Height="450" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                         <ItemsControl 
-ItemsSource="{Binding ActiveTasks}" 
+ItemsSource="{Binding tasksActiveView}" 
 ItemTemplate="{StaticResource TaskCardTemplate}"
 HorizontalContentAlignment="Stretch">
                             <ItemsControl.ItemsPanel>
@@ -289,14 +316,14 @@ HorizontalContentAlignment="Stretch">
                     </ScrollViewer>
                 </StackPanel>
             </Border>
-            <Border Grid.Column="3" Style="{StaticResource MainBorder}">
+            <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource MainBorder}">
                 <StackPanel>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="10" Background="Green">
                         <TextBlock FontWeight="Bold" Margin="3" Text="Выполнены" HorizontalAlignment="Center" Foreground="White"/>
                     </Border>
                     <ScrollViewer Height="450" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                         <ItemsControl 
-ItemsSource="{Binding CompletedTasks}" 
+ItemsSource="{Binding tasksCompletedView}" 
 ItemTemplate="{StaticResource TaskCardTemplate}"
 HorizontalContentAlignment="Stretch">
                             <ItemsControl.ItemsPanel>
@@ -310,9 +337,23 @@ HorizontalContentAlignment="Stretch">
                     </ScrollViewer>
                 </StackPanel>
             </Border>
-            <Border Grid.Column="4" Style="{StaticResource HistoriesBorder}">
+            <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" Style="{StaticResource HistoriesBorder}">
                 <StackPanel>
+                    
                     <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                            <TextBox x:Name="historytBox" Width="150"  TextChanged="historytBox_TextChanged" Text="{Binding HistorySearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="12" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+
+                            <Button Click="Button_Click_1" Height="25" Width="50" VerticalAlignment="Center" Margin="3" >
+                                <materialDesign:PackIcon Height="20" Width="20" Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+
+                    </Grid>
                     <ScrollViewer Style="{StaticResource HistoryScrollViewer}">
                         <ItemsControl ItemsSource="{Binding TasksHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
                             <ItemsControl.ItemsPanel>

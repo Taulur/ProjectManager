@@ -7,7 +7,7 @@
         xmlns:system="clr-namespace:System;assembly=netstandard"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
- Title="EditTaskPage" Height="675" Width="700" ResizeMode="NoResize">
+ Title="EditTaskPage" Height="700" Width="700" ResizeMode="NoResize">
     <Window.Resources>
         <DataTemplate x:Key="ProjectUserTemplate">
             <Border BorderBrush="Black" BorderThickness="1" Margin="3" Height="85" Background="AliceBlue" MouseLeftButtonDown="EditUserChose" CornerRadius="15" Cursor="Hand" Tag="{Binding}"  >
@@ -92,8 +92,9 @@
         DisplayDateStart="{x:Static system:DateTime.Today}"
         FirstDayOfWeek="Monday"
         IsTodayHighlighted="True"
+    
         SelectedDateFormat="Short"
-                            Text="Выберите дату"
+                            Text="{Binding taskHistory.Data.DueDate}"
         FontSize="14"
         Margin="5"
         VerticalContentAlignment="Center"/>
@@ -149,8 +150,8 @@ IsEditable="True" Margin="0,5" IsReadOnly="True"/>
                         <TextBlock Text="{Binding taskHistory.TimeAgo, StringFormat={}{0:HH:mm dd/MM/yyyy}}"></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <Button Margin="5" Click="Execute" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
-                <Button Margin="5" Click="Back" Style="{StaticResource CornerButton}" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+                <Button Margin="5" Click="Execute"  Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
+                <Button Margin="5" Click="Back" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
             </StackPanel>
         </Grid>
     </Border>

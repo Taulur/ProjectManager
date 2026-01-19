@@ -120,8 +120,9 @@
         </StackPanel>
         <Border Style="{StaticResource TopBarBorder}">
             <StackPanel Orientation="Horizontal">
-                <Button VerticalAlignment="Center" Height="50" FontSize="20"  Cursor="Hand" Click="ShowUsersPage" Content="👥 Пользователи"/>
-            </StackPanel>
+                    <Button VerticalAlignment="Center" Height="50" FontSize="20"  Cursor="Hand" Click="ToAuth" Content="👤Авторизация"/>
+                    <Button x:Name="UsersButton" VerticalAlignment="Center" Height="50" FontSize="20"  Cursor="Hand" Click="ShowUsersPage" Content="👥 Пользователи"/>
+                </StackPanel>
         </Border>
        
        
@@ -135,7 +136,7 @@
                     <Label Margin="0,5,5,5" FontSize="17" FontWeight="SemiBold" Content="{Binding ProjectsCount}"/>
             </StackPanel>
             
-            <Button Grid.Column="1" Cursor="Hand" Click="AddProject" HorizontalAlignment="Right" Content="➕ Новый проект"/>
+            <Button x:Name="AddButton" Grid.Column="1" Cursor="Hand" Click="AddProject" HorizontalAlignment="Right" Content="➕ Новый проект"/>
         </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -150,24 +151,45 @@
                         <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
                         <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.75" />
                     </materialDesign:TransitioningContent.OpeningEffects>
-                    <ScrollViewer Height="500" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
-                        <Border Style="{StaticResource MainBorder}">
-                            <ItemsControl ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectCardTemplate}" HorizontalContentAlignment="Stretch">
+                    <Border Style="{StaticResource MainBorder}">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="1" Orientation="Horizontal">
+                                    <TextBox x:Name="projectBox" Width="225" TextChanged="ProjectSearchQuery_Changed" Text="{Binding ProjectSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="13" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                                    <Border Margin="3" Grid.Row="1" Grid.Column="0" Padding="3" BorderBrush="RoyalBlue" BorderThickness="1" CornerRadius="5"  >
+                                        <ComboBox x:Name="projectCombo" SelectionChanged="ComboBox_SelectionChanged" VerticalAlignment="Center" Width="125" BorderThickness="0" ItemsSource="{Binding ProjectsFilter}" IsEditable="False" Margin="0,5"/>
+                                    </Border>
+                                    <Button Click="Button_Click" Height="35" VerticalAlignment="Center" Margin="5" >
+                                        <materialDesign:PackIcon Height="25" Width="25" Kind="Refresh" />
+                                    </Button>
+                                </StackPanel>
 
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
+                            </Grid>
+                            <ScrollViewer Height="500" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
 
-                                        <WrapPanel  HorizontalAlignment="Center">
+                                <ItemsControl ItemsSource="{Binding projectsView}" ItemTemplate="{StaticResource ProjectCardTemplate}" HorizontalContentAlignment="Stretch">
 
-                                        </WrapPanel>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
 
-                                    </ItemsPanelTemplate>
+                                            <WrapPanel  HorizontalAlignment="Center">
 
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </Border>
-                    </ScrollViewer>
+                                            </WrapPanel>
+
+                                        </ItemsPanelTemplate>
+
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
                 </materialDesign:TransitioningContent>
+                    
                 <materialDesign:TransitioningContent Grid.Column="1">
                     <materialDesign:TransitioningContent.OpeningEffects>
                         <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
@@ -175,7 +197,21 @@
                     </materialDesign:TransitioningContent.OpeningEffects>
                     <Border  Style="{StaticResource HistoriesBorder}">
                         <StackPanel>
+                          
                             <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                                    <TextBox x:Name="historytBox" Width="150"  TextChanged="historytBox_TextChanged" Text="{Binding HistorySearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="12" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+
+                                    <Button Click="Button_Click_1" Height="25" Width="50" VerticalAlignment="Center" Margin="3" >
+                                        <materialDesign:PackIcon Height="20" Width="20" Kind="Refresh" />
+                                    </Button>
+                                </StackPanel>
+
+                            </Grid>
                             <ScrollViewer MaxHeight="400" Style="{StaticResource HistoryScrollViewer}">
                                 <ItemsControl ItemsSource="{Binding ProjectHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
                                     <ItemsControl.ItemsPanel>

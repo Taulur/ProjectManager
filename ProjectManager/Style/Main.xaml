@@ -17,7 +17,14 @@
 
     <Style  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
         <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="RoyalBlue"/>
-        <Setter Property="BorderBrush" Value="LightBlue"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style TargetType="ComboBox" >
+        <Setter Property="BorderBrush" Value="RoyalBlue"/>
+        <Setter Property="BorderThickness" Value="1"/>
+
     </Style>
 
     <Style TargetType="StackPanel" x:Key="PagePanel">
