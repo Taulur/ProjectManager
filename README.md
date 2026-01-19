@@ -26,11 +26,6 @@
 
 * \*\*Операционная система\*\*: Windows 10 / 11 (64-bit)
 * \*\*.NET Runtime\*\*: .NET 8.0 Desktop Runtime  
-
-&nbsp; \[Скачать здесь →](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)  
-
-&nbsp; (выберите \*\*.NET Desktop Runtime\*\* — не SDK)
-
 * \*\*СУБД\*\*: Microsoft SQL Server 2019 / 2022
 
 
@@ -45,7 +40,7 @@
 
 Если ещё не установлен — скачайте и установите:  
 
-→ https://dotnet.microsoft.com/en-us/download/dotnet/8.0  
+→ (https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 
 → Выберите \*\*.NET Desktop Runtime 8.0.x\*\*
 
@@ -100,17 +95,19 @@
 
 Найдите секцию <connectionStrings> и убедитесь, что строка подключения соответствует вашей ситуации:
 
-\*<connectionStrings>\*
+`<connectionStrings>
 
-&nbsp; \*<add name="ProjectManagerDb"\*
+&nbsp; \*<add name="ProjectManagerDb"
 
-&nbsp;      \*connectionString="Server=localhost;Database=ProjectManagerDB;Integrated Security=true;TrustServerCertificate=True;"\*
+&nbsp;      \*connectionString="Server=localhost;Database=ProjectManagerDB;Integrated Security=true;TrustServerCertificate=True;"
 
-&nbsp;      \*providerName="System.Data.SqlClient" />\*
+&nbsp;      \*providerName="System.Data.SqlClient" />
 
-\*</connectionStrings>\*
+`</connectionStrings>
 
 ### 5. Запустите приложение
+Скачайте папку ProjectManagerApp
+Внутри будет .exe файл
 
 Просто дважды щёлкните по файлу ProjectManager.exe
 
