@@ -4,16 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
-       d:DesignHeight="550" d:DesignWidth="1100"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+      d:DesignHeight="700" d:DesignWidth="1250"
       Title="TaskPage">
     <Page.Resources>
         <DataTemplate x:Key="HistoryTemplate">
-            <Border Style="{StaticResource HistoryBorder}" MouseLeftButtonDown="leftHistory" Tag="{Binding}" Cursor="Hand">
-                <StackPanel>
+            <Border Style="{StaticResource HistoryBorder}" MouseLeftButtonDown="NavigateToUser_MouseLeftButtonDown" Tag="{Binding}" Cursor="Hand">
+                <Viewbox MaxHeight="25">
                     <TextBlock Margin="3" HorizontalAlignment="Center" Text="{Binding DisplayText, Mode=OneWay}"/>
-                </StackPanel>
+                </Viewbox>
                 <Border.ToolTip >
                     <ToolTip Background="White" Foreground="Black">
                         <StackPanel>
@@ -61,7 +61,7 @@
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="CommentTemplate">
-            <Border MouseLeftButtonDown="leftComment" Cursor="Hand" Tag="{Binding}" Height="75" Background="AliceBlue" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="10" Margin="5">
+            <Border MouseLeftButtonDown="NavigateToUser_MouseLeftButtonDown" Cursor="Hand" Tag="{Binding}" Height="75" Background="AliceBlue" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="10" Margin="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -103,7 +103,7 @@
     <StackPanel Style="{StaticResource PagePanel}">
         <StackPanel Orientation="Horizontal">
                 <TextBlock FontWeight="Bold" VerticalAlignment="Center" Margin="15,5,5,5" FontSize="25" Text="📋Задача "/>
-                <TextBlock Style="{StaticResource PageTitle}" Text="{Binding task.LastVersion.DisplayTitle}"></TextBlock>
+                <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Task.LastVersion.DisplayTitle}"></TextBlock>
             </StackPanel>
         <Border Style="{StaticResource TopBarBorder}">
             <Grid>
@@ -112,12 +112,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Button Style="{StaticResource TopBarButton}" Cursor="Hand" Click="projects" Content="📂 Проекты"/>
-                    <Button Style="{StaticResource TopBarButton}" Cursor="Hand" Click="users" Content="👥 Участники"/>
-                    <Button Style="{StaticResource TopBarButton}" Cursor="Hand"  Content="🕐 История"/>
+                    <Button Height="50" FontSize="20"  Cursor="Hand" Click="GoToProject_Click" Content="📂 Проекты"/>
+                    <Button Height="50" FontSize="20"  Cursor="Hand" Click="GoToProjectUsers_Click" Content="👥 Участники"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Style="{StaticResource TopBarButton}" Click="back" Cursor="Hand"  Content="↶ Вернуться"/>
+                    <Button Height="50" FontSize="20"  Click="GoBack_Click" Cursor="Hand"  Content="↶ Вернуться"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -131,27 +130,28 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
+
+            <Border VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
                 <StackPanel>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="📋" />
-                        <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="{Binding task.LastVersion.Data.Title}" />
+                        <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="{Binding Task.LastVersion.Data.Title}" />
                     </StackPanel>
-                   
-                    <Border  Background="{Binding task.ColorByStatus}" Margin="3" Padding="5" CornerRadius="10" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Center">
+
+                    <Border  Background="{Binding Task.ColorByStatus}" Margin="3" Padding="5" CornerRadius="10" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Center">
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock FontSize="18" Foreground="White" FontWeight="SemiBold" Text="🛠️"/>
-                            <TextBlock FontSize="18" Foreground="White" FontWeight="SemiBold" Text="{Binding task.LastVersion.Data.Status.Title}"/>
+                            <TextBlock FontSize="18" Foreground="White" FontWeight="SemiBold" Text="{Binding Task.LastVersion.Data.Status.Title}"/>
                         </StackPanel>
-                       
+
                     </Border>
-                    <Border Background="{Binding task.ColorByPriority}" CornerRadius="10" BorderThickness="1" BorderBrush="Black" Margin="3">
+                    <Border Background="{Binding Task.ColorByPriority}" CornerRadius="10" BorderThickness="1" BorderBrush="Black" Margin="3">
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="White" Text="⚠️Приоритет : " />
-                            <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="White" Text="{Binding task.LastVersion.Data.Priority.Title}"/>
-                    </StackPanel>
+                            <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="White" Text="{Binding Task.LastVersion.Data.Priority.Title}"/>
+                        </StackPanel>
                     </Border>
-                    
+
                     <Grid  HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -160,26 +160,26 @@
                         <Border Padding="3" Background="AliceBlue" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🗓️Дата создания:" />
-                                <TextBlock Text="{Binding task.CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"/>
-                        </StackPanel>
+                                <TextBlock Text="{Binding Task.CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"/>
+                            </StackPanel>
                         </Border>
                         <Border Padding="3" Background="AliceBlue" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Grid.Column="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🗓️Дата выполнения:" />
-                                <TextBlock Text="{Binding task.LastVersion.Data.DueDate, StringFormat={}{0:dd/MM/yyyy}}"/>
-                        </StackPanel>
+                                <TextBlock Text="{Binding Task.LastVersion.Data.DueDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                            </StackPanel>
                         </Border>
-                        
+
                     </Grid>
                     <StackPanel HorizontalAlignment="Center" >
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="⏳" />
-                            <TextBlock Style="{StaticResource TaskTemplateText}" Text="{Binding task.TimeLeft}" />
+                            <TextBlock Style="{StaticResource TaskTemplateText}" Text="{Binding Task.TimeLeft}" />
                         </StackPanel>
                     </StackPanel>
                     <ProgressBar Style="{StaticResource ProgressBar}" Margin="25,3,25,3" Height="15"
-Value="{Binding task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"/>
-                    <Border MouseLeftButtonDown="creatorTask" Cursor="Hand" BorderBrush="Black" BorderThickness="1" Margin="3" Height="90" Background="AliceBlue" CornerRadius="15" >
+Value="{Binding Task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"/>
+                    <Border MouseLeftButtonDown="Creator_MouseLeftButtonDown" Cursor="Hand" BorderBrush="Black" BorderThickness="1" Margin="3" Height="90" Background="AliceBlue" CornerRadius="15" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0.65*"/>
@@ -192,19 +192,20 @@ Value="{Binding task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"
                             </Grid.RowDefinitions>
                             <TextBlock Margin="3" FontSize="18" FontWeight="SemiBold" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Text="👤➕Создатель задачи" HorizontalAlignment="Center"/>
                             <Border Grid.Column="0" Grid.Row="1" Margin="3" CornerRadius="100" Height="50" Width="50" Background="RoyalBlue">
-                                <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding task.Createdby.FirstWord}"/>
+                                <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding Task.Createdby.FirstWord}"/>
                             </Border>
                             <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Orientation="Vertical">
-                                <TextBlock Text="{Binding task.Createdby.User.Fullname}"/>
-                                <TextBlock Text="{Binding task.Createdby.User.Username}"/>
+                                <TextBlock Text="{Binding Task.Createdby.User.Fullname}"/>
+                                <TextBlock Text="{Binding Task.Createdby.User.Username}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                                 <TextBlock Text="👨‍💼"/>
-                                <TextBlock Text="{Binding task.Createdby.Role.Title}"/>
+                                <TextBlock Text="{Binding Task.Createdby.Role.Title}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
-                    <Border MouseLeftButtonDown="assignedTask" Cursor="Hand" BorderBrush="Black" BorderThickness="1" Margin="3" Height="90" Background="AliceBlue" CornerRadius="15" >
+
+                    <Border MouseLeftButtonDown="Assignee_MouseLeftButtonDown" Cursor="Hand" BorderBrush="Black" BorderThickness="1" Margin="3" Height="90" Background="AliceBlue" CornerRadius="15" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0.65*"/>
@@ -217,39 +218,76 @@ Value="{Binding task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"
                             </Grid.RowDefinitions>
                             <TextBlock Margin="3" FontSize="18" FontWeight="SemiBold" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Text="👤📌Исполнитель задачи" HorizontalAlignment="Center"/>
                             <Border Grid.Column="0" Grid.Row="1" Margin="3" CornerRadius="100" Height="50" Width="50" Background="RoyalBlue">
-                                <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding task.LastVersion.Data.Assignedto.FirstWord}"/>
+                                <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding Task.LastVersion.Data.Assignedto.FirstWord}"/>
                             </Border>
                             <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Orientation="Vertical">
-                                <TextBlock Text="{Binding task.LastVersion.Data.Assignedto.User.Fullname}"/>
-                                <TextBlock Text="{Binding task.LastVersion.Data.Assignedto.User.Username}"/>
+                                <TextBlock Text="{Binding Task.LastVersion.Data.Assignedto.User.Fullname}"/>
+                                <TextBlock Text="{Binding Task.LastVersion.Data.Assignedto.User.Username}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                                 <TextBlock Text="👨‍💼"/>
-                                <TextBlock Text="{Binding task.LastVersion.Data.Assignedto.Role.Title}"/>
+                                <TextBlock Text="{Binding Task.LastVersion.Data.Assignedto.Role.Title}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
 
                     <StackPanel HorizontalAlignment="Center" Margin="10" Orientation="Horizontal">
-                        <Button Click="edit" Content="✏️ Изменить" Margin="10"  Style="{StaticResource ProjectChangeButton}"/>
-                        <Button Click="remove" Content="🗑️ Удалить" Margin="10" Style="{StaticResource ProjectDeleteButton}"/>
+                        <Button Click="EditTask_Click" Content="✏️ Изменить" Margin="10"  />
+                        <Button Click="RemoveTask_Click" Content="🗑️ Удалить" Margin="10" />
                     </StackPanel>
-                    
+
                 </StackPanel>
-                
+
             </Border>
-            <Border Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
-                <Grid>
-                    <StackPanel>
-                        <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="🏷️Описание задачи" />
-                        <Border Background="AliceBlue" CornerRadius="10" Margin="5" Padding="5" Height="125" BorderBrush="Black" BorderThickness="1" >
-                            <TextBlock Text="{Binding task.LastVersion.Data.Description}" TextWrapping="WrapWithOverflow" />
-                        </Border>
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="💬Комменатрии" />
+            
+            <materialDesign:TransitioningContent Grid.Row="0" Grid.Column="1">
+                <materialDesign:TransitioningContent.OpeningEffects>
+                    <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
+                    <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.75" />
+                </materialDesign:TransitioningContent.OpeningEffects>
+                <Border VerticalAlignment="Stretch" Style="{StaticResource MainBorder}">
+                    <Grid>
+                        <StackPanel>
+                            <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="🏷️Описание задачи" />
+                            <Border Background="AliceBlue" CornerRadius="10" Margin="5" Padding="5" Height="125" BorderBrush="Black" BorderThickness="1" >
+                                <TextBlock Text="{Binding Task.LastVersion.Data.Description}" TextWrapping="WrapWithOverflow" />
+                            </Border>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="💬Комменатрии" />
+                            </StackPanel>
+                            <ScrollViewer Height="325   " Style="{StaticResource HistoryScrollViewer}">
+                                <ItemsControl ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentTemplate}" HorizontalContentAlignment="Stretch">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel>
+
+                                            </StackPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
                         </StackPanel>
-                        <ScrollViewer Height="215" Style="{StaticResource HistoryScrollViewer}">
-                            <ItemsControl ItemsSource="{Binding comments}" ItemTemplate="{StaticResource CommentTemplate}" HorizontalContentAlignment="Stretch">
+
+                        <Border VerticalAlignment="Bottom" Padding="5" BorderThickness="2" BorderBrush="Black" Style="{StaticResource MainBorder}">
+                            <Grid>
+                                <TextBox Text="{Binding NewComment.Text}" Margin="5,0,35,0" FontSize="12"/>
+                                <Button Click="AddComment_Click" Margin="5" FontSize="20" HorizontalAlignment="Right" FontWeight="Bold" Foreground="RoyalBlue" Background="White" BorderBrush="White" Content="➤"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                </Border>
+            </materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent Grid.Column="2">
+                <materialDesign:TransitioningContent.OpeningEffects>
+                    <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
+                    <materialDesign:TransitionEffect Kind="SlideInFromRight" Duration="0:0:0.75" />
+                </materialDesign:TransitioningContent.OpeningEffects>
+                <Border Style="{StaticResource HistoriesBorder}">
+                    <StackPanel>
+                        <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
+                        <ScrollViewer Style="{StaticResource HistoryScrollViewer}">
+                            <ItemsControl ItemsSource="{Binding TaskHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel>
@@ -260,32 +298,8 @@ Value="{Binding task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"
                             </ItemsControl>
                         </ScrollViewer>
                     </StackPanel>
-                    
-                    <Border VerticalAlignment="Bottom" Padding="5" BorderThickness="2" BorderBrush="Black" Style="{StaticResource MainBorder}">
-                        <Grid>
-                            <TextBox Text="{Binding comment.Text}" Margin="5,0,35,0" FontSize="12"/>
-                            <Button Click="AddComment" Margin="5" FontSize="20" HorizontalAlignment="Right" FontWeight="Bold" Foreground="RoyalBlue" Background="White" BorderBrush="White" Content="➤"/>
-                        </Grid>
-                    </Border>
-                </Grid>
-                
-            </Border>
-            <Border Grid.Column="2" Style="{StaticResource HistoriesBorder}">
-                <StackPanel>
-                    <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
-                    <ScrollViewer Style="{StaticResource HistoryScrollViewer}">
-                        <ItemsControl ItemsSource="{Binding tasksHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel>
-
-                                    </StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </StackPanel>
-            </Border>
+                </Border>
+            </materialDesign:TransitioningContent>
         </Grid>
     </StackPanel>
 </Page>

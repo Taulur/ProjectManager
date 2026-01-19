@@ -1,116 +1,161 @@
 ﻿using ProjectManager.Models;
 using ProjectManager.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ProjectManager.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для TaskPage.xaml
-    /// </summary>
     public partial class TaskPage : Page
     {
-        public TasksService tasksService { get; set; } = new();
-        public ProjectsServices projectsServices { get; set; } = new();
-        public ObservableCollection<TasksHistory> tasksHistories { get; set; } = new();
-        public Models.Task task { get; set; } = new();
-        public ObservableCollection<Comment> comments { get; set; } = new();
-        public Comment comment { get; set; } = new();
+        public DbService DbService { get; set; } = new DbService();
+        public Models.Task Task { get; set; }
+        public ObservableCollection<TasksHistory> TaskHistories { get; set; } = new();
+        public ObservableCollection<Comment> Comments { get; set; } = new();
 
-        public TaskPage(Models.Task _task)
+        public Comment NewComment { get; set; } = new() { Text = "" };
+
+        private ProjectUser CurrentUser => Models.CurrentUser.ProjectUserByProject(Task.Project);
+
+        public TaskPage(Models.Task task)
         {
-            task = _task;
+            if (task == null) throw new ArgumentNullException(nameof(task));
+
+            Task = task;
             var sortedHistories = task.TasksHistories
-      .OrderByDescending(h => h.CreatedAt)
-      .ToList();
+                .OrderByDescending(h => h.CreatedAt)
+                .ToList();
 
-            foreach (var taskHistory in sortedHistories)
+            TaskHistories.Clear();
+            foreach (var h in sortedHistories)
             {
-                tasksHistories.Add(taskHistory);
+                TaskHistories.Add(h);
             }
-            foreach (var _comment in task.Comments)
-                comments.Add(_comment);
-            InitializeComponent();
-        }
-
-        private void AddComment(object sender, RoutedEventArgs e)
-        {
-            Comment temp = new Comment
+            Comments.Clear();
+            foreach (var c in task.Comments)
             {
-                Task = task,
-                Projectuser = projectsServices.ProjectUsers.ToList().First(),
-                Text = comment.Text,
-                CreatedAt = DateTime.Now,
+                Comments.Add(c);
+            }
+
+            InitializeComponent();
+            DataContext = this;
+        }
+
+        private void AddComment_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(NewComment.Text))
+            {
+                MessageBox.Show("Введите текст комментария", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (CurrentUser == null)
+            {
+                MessageBox.Show("Не удалось определить текущего участника проекта", "Ошибка");
+                return;
+            }
+
+            var comment = new Comment
+            {
+                TaskId = Task.Id,
+                Task = Task,
+                ProjectuserId = CurrentUser.Id,
+                Projectuser = CurrentUser,
+                Text = NewComment.Text.Trim(),
+                CreatedAt = DateTime.UtcNow
             };
-            tasksService.Add(temp);
 
-            comments.Add(temp);
+            DbService.Comments.Add(comment);
+            Comments.Add(comment);
+            DbService.Commit();
 
+            NewComment.Text = " ";
         }
 
-        private void edit(object sender, RoutedEventArgs e)
+
+        private void EditTask_Click(object sender, RoutedEventArgs e)
         {
-            var popupWindow = new EditTaskWindow(task.Project,task);
-            popupWindow.Owner = Window.GetWindow(this);
-            popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            popupWindow.ShowDialog();
+            var window = new EditTaskWindow(Task.Project, Task)
+            {
+                Owner = Window.GetWindow(this),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            window.ShowDialog();
+            DbService.Commit();
+            Task = DbService.Tasks.FirstOrDefault(t => t.Id == Task.Id);
         }
 
-        private void remove(object sender, RoutedEventArgs e)
+        private void RemoveTask_Click(object sender, RoutedEventArgs e)
         {
+          
+                var result = MessageBox.Show(
+                    $"Удалить задачу «{Task.LastVersion.Data.Title}»?",
+                    "Подтверждение",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+
+                DbService.RemoveTask(Task);
+                DbService.Commit();
+                NavigationService?.GoBack();
+            }
            
         }
 
-        private void projects(object sender, RoutedEventArgs e)
+        private void GoToProject_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            NavigationService?.Navigate(new ProjectPage(Task.Project));
         }
 
-        private void users(object sender, RoutedEventArgs e)
+        private void GoToProjectUsers_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ProjectUsersPage(task.Project));
+            NavigationService?.Navigate(new ProjectUsersPage(Task.Project));
         }
 
-        private void back(object sender, RoutedEventArgs e)
+        private void GoBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ProjectPage(task.Project));
+            NavigationService?.GoBack();
         }
 
-        private void leftHistory(object sender, MouseButtonEventArgs e)
+        private void NavigateToUser_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var border = sender as Border;
-            TasksHistory tasksHistory = border?.Tag as TasksHistory;
-            NavigationService.Navigate(new ProjectUserPage(tasksHistory.Projectuser));
+            if (sender is not Border border) return;
+
+            if (border.Tag is ProjectUser pu)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(pu));
+            }
+            else if (border.Tag is TasksHistory history && history.Projectuser != null)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(history.Projectuser));
+            }
+            else if (border.Tag is Comment comment && comment.Projectuser != null)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(comment.Projectuser));
+            }
         }
 
-        private void leftComment(object sender, MouseButtonEventArgs e)
+        private void Creator_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var border = sender as Border;
-            Comment comment = border?.Tag as Comment;
-            NavigationService.Navigate(new ProjectUserPage(comment.Projectuser));
+            if (Task?.Createdby != null)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(Task.Createdby));
+            }
         }
 
-        private void creatorTask(object sender, MouseButtonEventArgs e)
+        private void Assignee_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            NavigationService.Navigate(new ProjectUserPage(task.Createdby));
-        }
-
-        private void assignedTask(object sender, MouseButtonEventArgs e)
-        {
-            NavigationService.Navigate(new ProjectUserPage(task.LastVersion.Data.Assignedto));
+            var assignee = Task?.LastVersion?.Data?.Assignedto;
+            if (assignee != null)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(assignee));
+            }
         }
     }
 }

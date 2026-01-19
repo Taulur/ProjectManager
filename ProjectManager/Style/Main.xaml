@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Style TargetType="Border" x:Key="ShadowBorder">
         <Setter Property="Effect">
@@ -14,25 +15,92 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="CornerButton">
+    <Style  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="RoyalBlue"/>
+        <Setter Property="BorderBrush" Value="LightBlue"/>
+    </Style>
+
+    <Style TargetType="StackPanel" x:Key="PagePanel">
+        <Setter Property="Background" Value="AliceBlue"/>
+    </Style>
+
+    <Style x:Key="CustomScrollbarThumb" TargetType="Thumb">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border CornerRadius="5"
-              Background="{TemplateBinding Background}"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
-              Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="Center" 
-                            VerticalAlignment="Center"/>
-                    </Border>
+                <ControlTemplate TargetType="Thumb">
+                    <Border CornerRadius="4" 
+                            Background="#444444" 
+                            Margin="2" 
+                            Width="8" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="StackPanel" x:Key="PagePanel">
-        <Setter Property="Background" Value="AliceBlue"/>
+    <Style TargetType="ScrollBar">
+        <Style.Resources>
+            <Style TargetType="Thumb" BasedOn="{StaticResource CustomScrollbarThumb}"/>
+        </Style.Resources>
+    </Style>
+
+    <Style  TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="RoyalBlue"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1.5"/>
+        <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Height" Value="30"/>
+
+        
+        
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="SkyBlue"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                         To="1.03" Duration="0:0:0.15"/>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                         To="1.03" Duration="0:0:0.15"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                         To="1" Duration="0:0:0.15"/>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                         To="1" Duration="0:0:0.15"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="RoyalBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="Border" BasedOn="{StaticResource ShadowBorder}" x:Key="ProjectBorder">
@@ -83,37 +151,10 @@
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
 
-    <Style TargetType="Button" BasedOn="{StaticResource CornerButton}" x:Key="ProjectChangeButton">
-        <Setter Property="Background" Value="RoyalBlue"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="Padding" Value="10,5"/>
-        <Setter Property="Foreground" Value="WhiteSmoke"/>
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="30"/>
-    </Style>
+    
 
 
-    <Style TargetType="ComboBox" x:Key="RoleComboBox">
-       
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="Padding" Value="10,5"/>
-        <Setter Property="Foreground" Value="WhiteSmoke"/>
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="30"/>
-       
-    </Style>
-
-    <Style TargetType="Button" BasedOn="{StaticResource CornerButton}" x:Key="ProjectDeleteButton">
-        <Setter Property="Background" Value="PaleVioletRed"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="Padding" Value="10,5"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Foreground" Value="White"/>
-    </Style>
+   
 
     <Style TargetType="ProgressBar" x:Key="ProgressBar">
         <Setter Property="Template">
@@ -168,32 +209,10 @@
 
     <Style TargetType="Border" BasedOn="{StaticResource ShadowBorder}" x:Key="TopBarBorder">
         <Setter Property="Background" Value="White"/>
-        <Setter Property="Height" Value="40"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="CornerRadius" Value="10"/>
     </Style>
 
-    <Style TargetType="Button" BasedOn="{StaticResource CornerButton}" x:Key="TopBarButton">
-        <Setter Property="Background" Value="AliceBlue"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Width" Value="145"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Margin" Value="5"/>
-    </Style>
-
-    <Style TargetType="Button" BasedOn="{StaticResource CornerButton}" x:Key="MiddleBarButton">
-        <Setter Property="Background" Value="RoyalBlue"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="Foreground" Value="WhiteSmoke"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="Margin" Value="35,0,35,0"/>
-        <Setter Property="Width" Value="175"/>
-        <Setter Property="Height" Value="30"/>
-    </Style>
 
     <Style TargetType="Label" x:Key="ProjectsTitle">
         <Setter Property="VerticalAlignment" Value="Center"/>

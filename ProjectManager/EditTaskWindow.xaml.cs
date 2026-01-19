@@ -39,6 +39,7 @@ namespace ProjectManager
         bool isEdit = false;
         string selectedColor = "Red";
         public ProjectUser selectedUser { get; set; } = new();
+        public ProjectUser projectUser { get; set; } = new();
 
         public string TitleWindow { get; set; }
         public string HintWindow { get; set; }
@@ -47,7 +48,11 @@ namespace ProjectManager
         {
             project = _project;
             projectUsersService.GetAll(project);
-            
+
+            projectUser = CurrentUser.ProjectUserByProject(project);
+            MessageBox.Show(projectUser.User.Username);
+            taskHistory.Projectuser = projectUser;
+
             if (_task != null)
             {
 
@@ -65,6 +70,7 @@ namespace ProjectManager
                 };
 
                 taskHistory.CreatedAt = task.LastVersion.CreatedAt;
+                
                 
                
 
@@ -131,7 +137,6 @@ namespace ProjectManager
                 {
                     Action = tasksService.Actions[1],
                     Task = task,
-                    Projectuser = projectUsersService.ProjectUsers[0],
                     Data = data,
                     CreatedAt = DateTime.Now,
                 };
@@ -147,12 +152,11 @@ namespace ProjectManager
                     // В ИСТОРИЮ ИЗМЕНЕНИЯ ТОТ КТО ИЗМЕНИЛ ЗАНОСИТСЯ ПОКА ЧТО ПЕРВЫЙ УЧАСТНИК из всех ПРОЕКТов
 
                     taskHistory.Action = tasksService.Actions[0];
-                    taskHistory.Projectuser = projectUsersService.ProjectUsers[0];
                     taskHistory.Task = task;
                     taskHistory.CreatedAt = DateTime.Now;
                     taskHistory.Data.Assignedto = selectedUser;
                     taskHistory.Data.Color = selectedColor;
-                    task.Createdby = projectUsersService.ProjectUsers[0];
+                    task.Createdby = projectUser;
                     task.CreatedAt = DateTime.Now;
                     task.Project = project;
 

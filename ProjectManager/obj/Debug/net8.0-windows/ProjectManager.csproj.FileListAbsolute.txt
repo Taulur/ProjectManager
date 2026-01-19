@@ -182,3 +182,6 @@ C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditProject
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditProjectWindow.baml
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditTaskWindow.g.cs
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditTaskWindow.baml
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\ProjectManager.sourcelink.json
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthPage.g.cs
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthPage.baml

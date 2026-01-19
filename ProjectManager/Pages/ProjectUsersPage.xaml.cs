@@ -1,108 +1,141 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ProjectManager.Models;
+using ProjectManager.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ProjectManager.Models;
-using ProjectManager.Services;
 
 namespace ProjectManager.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для ProjectUsersPage.xaml
-    /// </summary>
     public partial class ProjectUsersPage : Page
     {
-        public Project project { get; set; } = new();
-        public ObservableCollection<ProjectUser> projectUsers { get; set; } = new();
-        public ObservableCollection<User> users { get; set; } = new();
-        public UsersServices usersServices { get; set; } = new();
-        public ProjectUsersService projectUsersService { get; set; } = new();
-        public RolesService rolesService { get; set; } = new();
-        public int RoleId { get; set; } = new();
-        public ProjectUsersPage(Project _project)
+        public DbService DbService { get; set; } = new DbService();
+
+        public Project Project { get; set; }
+        public ObservableCollection<ProjectUser> ProjectUsers { get; set; } = new();
+        public ObservableCollection<User> AvailableUsers { get; set; } = new(); 
+
+        public ProjectUsersPage(Project project)
         {
-            project = _project;
-            usersServices.GetAll(project);
-            foreach (var projectUser in project.ProjectUsers)
-            {
-                projectUsers.Add(projectUser);
-            }
+            DbService.GetAll();
+
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            Project = project;
+
+            RefreshProjectUsers();
+
+            RefreshAvailableUsers();
+
             InitializeComponent();
+
+            DataContext = this;
         }
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void RefreshProjectUsers()
         {
-            var combobox = sender as ComboBox;
-            ProjectUser temp = combobox.Tag as ProjectUser;
-
-
-            foreach (var role in rolesService.Roles)
+            ProjectUsers.Clear();
+            foreach (var pu in Project.ProjectUsers)
             {
-                if (role.Id == RoleId)
+                ProjectUsers.Add(pu);
+            }
+        }
+
+        private void RefreshAvailableUsers()
+        {
+            var alreadyInProject = Project.ProjectUsers
+                .Select(pu => pu.UserId)
+                .ToHashSet();
+
+            AvailableUsers.Clear();
+            foreach (var user in DbService.Users)
+            {
+                if (!alreadyInProject.Contains(user.Id))
                 {
-                    temp.Role = role;
-                    break;
+                    AvailableUsers.Add(user);
                 }
             }
-            usersServices.Commit();
         }
 
-        private void projects(object sender, RoutedEventArgs e)
+        private void RoleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
-        }
+            if (sender is not ComboBox comboBox) return;
+            if (comboBox.Tag is not ProjectUser projectUser) return;
+            if (e.AddedItems.Count == 0) return;
 
-        private void back(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new ProjectPage(project));
-        }
-
-        private void remove(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            ProjectUser temp = button.Tag as ProjectUser;
-            projectUsersService.Remove(temp);
-            projectUsersService.GetAll(project);
-            projectUsers.Clear();
-            foreach (var projectUser in project.ProjectUsers)
+            if (comboBox.SelectedValue is int roleId)
             {
-                projectUsers.Add(projectUser);
+                var newRole = DbService.Roles.FirstOrDefault(r => r.Id == roleId);
+                if (newRole != null && newRole != projectUser.Role)
+                {
+                    projectUser.Role = newRole;
+                    projectUser.RoleId = newRole.Id;
+                    DbService.Commit();
+
+                }
             }
-            usersServices.GetAll(project);
         }
 
-        private void add(object sender, RoutedEventArgs e)
+        private void RemoveUser_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            User temp = button.Tag as User;
+            if (sender is not Button button) return;
+            if (button.Tag is not ProjectUser projectUser) return;
 
-            ProjectUser newUser = new ProjectUser
+            if (MessageBox.Show(
+                $"Удалить {projectUser.User?.Fullname ?? "пользователя"} из проекта?",
+                "Подтверждение",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            DbService.RemoveProjectUser(projectUser);
+            DbService.Commit();
+
+            RefreshProjectUsers();
+            RefreshAvailableUsers(); 
+        }
+
+        private void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button) return;
+            if (button.Tag is not User user) return;
+
+            if (Project.ProjectUsers.Any(pu => pu.UserId == user.Id))
+                return;
+
+            var defaultRole = DbService.Roles.FirstOrDefault(r => r.Title?.ToLower().Contains("member") == true)
+                           ?? DbService.Roles.FirstOrDefault(); 
+
+            var newProjectUser = new ProjectUser
             {
-                User = temp,
-                Project = project,
-                Role = rolesService.Roles[0],
-                CreatedAt = DateTime.Now,
+                UserId = user.Id,
+                User = user,
+                ProjectId = Project.Id,
+                Project = Project,
+                RoleId = defaultRole?.Id ?? 0,
+                Role = defaultRole,
+                CreatedAt = DateTime.UtcNow
             };
 
-            projectUsersService.Add(newUser);
-            projectUsersService.GetAll(project);
-            projectUsers.Clear();
-            foreach (var projectUser in project.ProjectUsers)
-            {
-                projectUsers.Add(projectUser);
-            }
-            usersServices.GetAll(project);
+            Project.ProjectUsers.Add(newProjectUser);
+            DbService.Commit();
 
+            RefreshProjectUsers();
+            RefreshAvailableUsers(); 
+        }
+
+        private void GoToProjects_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new ProjectPage(Project));
         }
     }
 }

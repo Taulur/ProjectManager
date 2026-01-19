@@ -4,14 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
-      d:DesignHeight="550" d:DesignWidth="1100"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+       d:DesignHeight="700" d:DesignWidth="1250"
       Title="MainPage">
     
     <Page.Resources>
     <DataTemplate x:Key="ProjectCardTemplate">
-            <Border Style="{StaticResource ProjectBorder}" Cursor="Hand" Tag="{Binding}" MouseLeftButtonDown="OnCardClick">
+           
+                <Border Style="{StaticResource ProjectBorder}" Cursor="Hand" Tag="{Binding}" MouseLeftButtonDown="OnCardClick">
                 <StackPanel>
                     <Border Style="{StaticResource ProjectColor}" Background="{Binding LastVersion.Data.Color}"/>
                     <StackPanel Orientation="Horizontal">
@@ -46,17 +47,21 @@
                          Maximum="{Binding TotalTasksCount, Mode=OneWay}" />
                     </StackPanel >
                     <StackPanel Margin="0,8,0,0"  Orientation="Horizontal" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
-                        <Button Style="{StaticResource ProjectChangeButton}" Content="✏️ Изменить" Click="edit" Tag="{Binding}" Margin="0,0,16,0" Cursor="Hand"/>
-                        <Button Style="{StaticResource ProjectDeleteButton}"  Content="🗑️ Удалить" Click="remove" Tag="{Binding}" Cursor="Hand"/>
+                        <Button  Content="✏️ Изменить" Width="110" FontSize="12"  Click="EditProject" Tag="{Binding}" Margin="0,0,0,0" Cursor="Hand"/>
+                        <Button  Content="🗑️ Удалить" Width="110 " FontSize="12"  Click="RemoveProject" Tag="{Binding}" Cursor="Hand"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
+         
         </DataTemplate>
         <DataTemplate x:Key="HistoryTemplate">
-            <Border Style="{StaticResource HistoryBorder}" MouseLeftButtonDown="leftHistory" MouseRightButtonDown="rightHistory" Tag="{Binding}"  Cursor="Hand">
+           
+                <Border Style="{StaticResource HistoryBorder}" MouseLeftButtonDown="LeftHistoryClick" MouseRightButtonDown="RightHistoryClick" Tag="{Binding}"  Cursor="Hand">
                     <StackPanel>
+                    <Viewbox MaxHeight="25">
                         <TextBlock Margin="3" HorizontalAlignment="Center" Text="{Binding DisplayText, Mode=OneWay}"/>
-                    </StackPanel>
+                    </Viewbox>
+                </StackPanel>
                     <Border.ToolTip >
                         <ToolTip Background="White" Foreground="Black">
                             <StackPanel>
@@ -102,18 +107,20 @@
                         </ToolTip>
                     </Border.ToolTip>
                 </Border>
+     
         </DataTemplate>
-        
+
     </Page.Resources>
 
-    <StackPanel x:Name="MainContent" Style="{StaticResource PagePanel}">
+    <Grid>
+        <StackPanel x:Name="MainContent" Style="{StaticResource PagePanel}">
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Margin="15,5,5,5" FontSize="25" Text="📋"/>
-            <TextBlock Style="{StaticResource PageTitle}" x:Name="Title" Text="Менеджер проектов"></TextBlock>
+            <TextBlock Style="{StaticResource PageTitle}" Text="Менеджер проектов"></TextBlock>
         </StackPanel>
         <Border Style="{StaticResource TopBarBorder}">
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource TopBarButton}" Cursor="Hand" Click="users" Content="👥 Пользователи"/>
+                <Button VerticalAlignment="Center" Height="50" FontSize="20"  Cursor="Hand" Click="ShowUsersPage" Content="👥 Пользователи"/>
             </StackPanel>
         </Border>
        
@@ -125,55 +132,66 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Label Style="{StaticResource ProjectsTitle}" Content="Доступные проекты : "/>
-                <Label Margin="0,5,5,5" FontSize="17" FontWeight="SemiBold" Content="{Binding projectsCount}"/>
+                    <Label Margin="0,5,5,5" FontSize="17" FontWeight="SemiBold" Content="{Binding ProjectsCount}"/>
             </StackPanel>
             
-            <Button Grid.Column="1" Style="{StaticResource MiddleBarButton}" Cursor="Hand" Click="add" HorizontalAlignment="Right" Content="➕ Новый проект"/>
+            <Button Grid.Column="1" Cursor="Hand" Click="AddProject" HorizontalAlignment="Right" Content="➕ Новый проект"/>
         </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2.5*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <materialDesign:TransitioningContent>
+                    <materialDesign:TransitioningContent.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.75" />
+                    </materialDesign:TransitioningContent.OpeningEffects>
+                    <ScrollViewer Height="500" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
+                        <Border Style="{StaticResource MainBorder}">
+                            <ItemsControl ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectCardTemplate}" HorizontalContentAlignment="Stretch">
 
-            <ScrollViewer MaxHeight="400" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
-                <Border Style="{StaticResource MainBorder}">
-                    <ItemsControl ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectCardTemplate}" HorizontalContentAlignment="Stretch">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel  HorizontalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
 
-                                </WrapPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Border>
-            </ScrollViewer>
-                    
-            <Border Grid.Column="1" Style="{StaticResource HistoriesBorder}">
-                <StackPanel>
-                    <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
-                    <ScrollViewer MaxHeight="400" Style="{StaticResource HistoryScrollViewer}">
-                        <ItemsControl ItemsSource="{Binding ProjectHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel>
+                                        <WrapPanel  HorizontalAlignment="Center">
 
-                                    </StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                                        </WrapPanel>
+
+                                    </ItemsPanelTemplate>
+
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </Border>
                     </ScrollViewer>
-                </StackPanel>
+                </materialDesign:TransitioningContent>
+                <materialDesign:TransitioningContent Grid.Column="1">
+                    <materialDesign:TransitioningContent.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="FadeIn" Duration="0:0:0.75" />
+                        <materialDesign:TransitionEffect Kind="SlideInFromRight" Duration="0:0:0.75" />
+                    </materialDesign:TransitioningContent.OpeningEffects>
+                    <Border  Style="{StaticResource HistoriesBorder}">
+                        <StackPanel>
+                            <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
+                            <ScrollViewer MaxHeight="400" Style="{StaticResource HistoryScrollViewer}">
+                                <ItemsControl ItemsSource="{Binding ProjectHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel>
 
-            </Border>
-        </Grid>
-       
-       
-       
-       
-    </StackPanel>
+                                            </StackPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+
+                    </Border>
+                </materialDesign:TransitioningContent>
+            </Grid>
+        </StackPanel>
+    </Grid>
 </Page>

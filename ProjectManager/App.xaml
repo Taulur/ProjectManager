@@ -6,24 +6,35 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <!--<Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
                 <Setter Property="AutomationProperties.Name" Value="" />
             </Style>
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
                 <Setter Property="AutomationProperties.Name" Value="" />
-            </Style>-->
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignDatePicker}">
+                <Setter Property="AutomationProperties.Name" Value="" />
+            </Style>
+            <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MaterialDesignTextBoxBase}">
+                <Setter Property="AutomationProperties.Name" Value="" />
+            </Style>
+
+
 
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-                <materialDesign:BundledTheme BaseTheme="Dark"/>-->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <materialDesign:BundledTheme BaseTheme="Light"/>
+                <materialDesign:BundledTheme PrimaryColor="LightBlue"/>
+                <materialDesign:BundledTheme SecondaryColor="Green"/>
+
                 <!--<ResourceDictionary>
-                    <SolidColorBrush x:Key="MaterialDesign.Brush.Primary" Color="#00fa9a"/>
-                    <SolidColorBrush x:Key="MaterialDesign.Brush.Primary.Foreground" Color="#000"/>
-                    <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary" Color="#7FFF00" />
-                    <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary.Foreground" Color="#fff" />
-                </ResourceDictionary>-->
+                <SolidColorBrush x:Key="MaterialDesign.Brush.Primary" Color="#00fa9a"/>
+                <SolidColorBrush x:Key="MaterialDesign.Brush.Primary.Foreground" Color="#000"/>
+                <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary" Color="#7FFF00" />
+                <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary.Foreground" Color="#fff" />
+            </ResourceDictionary>-->
                 <ResourceDictionary Source="/Style/Main.xaml"/>
-             
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

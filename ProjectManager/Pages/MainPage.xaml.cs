@@ -5,19 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static MaterialDesignThemes.Wpf.Theme.ComboBox;
 
 namespace ProjectManager.Pages
 {
@@ -26,97 +17,127 @@ namespace ProjectManager.Pages
     /// </summary>
     public partial class MainPage : Page
     {
-        public DbService DbService { get; set; } = new();
-        public ProjectsServices ProjectsServices { get; set; } = new();
-        public UsersServices UsersServices { get; set; } = new();
-        public ObservableCollection<Project> Projects { get; set; } = new();
-        public Project? project { get; set; } = null;
-        public User user { get; set; } = null;
+   
+        public DbService DbService { get; set; } = new DbService();
+
+        public ObservableCollection<Project> Projects => DbService.Projects;
+
+
         public ObservableCollection<ProjectsHistory> ProjectHistories { get; set; } = new();
 
-        public int projectsCount
-        {
-            get
-            {
-                return Projects.Count;
-            }
-        }
+
+        public int ProjectsCount => Projects.Count;
+
+        private User CurrentUser => Models.CurrentUser.User; 
 
         public MainPage()
         {
-
-            user = UsersServices.Users.First();
-            ProjectsServices.GetAll(user);
-            Projects = ProjectsServices.Projects;
-            var histories = ProjectsServices.ProjectsHistories;
-            var reversedList = histories.Reverse().ToList();
-
-            // Создаем новую ObservableCollection
-            ProjectHistories = new ObservableCollection<ProjectsHistory>(reversedList);
             InitializeComponent();
+            DbService.LoadUserProjects(CurrentUser);
+
+            var histories = DbService.ProjectsHistories
+                .OrderByDescending(h => h.CreatedAt) 
+                .ToList();
+
+            ProjectHistories = new ObservableCollection<ProjectsHistory>(histories);
+
+            DataContext = this;
+
         }
 
-        public void OnCardClick(object sender, EventArgs e)
+      
+
+
+        private void OnCardClick(object sender, RoutedEventArgs e) 
         {
-            
-            var border = sender as Border;
-            Project project = border?.Tag as Project;
-            if (project != null)
+            if (sender is Border border && border.Tag is Project project)
             {
-                NavigationService.Navigate(new ProjectPage(project));
+                NavigationService?.Navigate(new ProjectPage(project));
             }
-           
         }
 
-        public void add(object sender, EventArgs e)
+        private void AddProject(object sender, RoutedEventArgs e)
         {
             var popupWindow = new EditProjectWindow();
             popupWindow.Owner = Window.GetWindow(this);
             popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            popupWindow.ShowDialog(); // или Show() для неблокирующего
+            popupWindow.ShowDialog();
+
+            DbService.Commit();
+            DbService.LoadUserProjects(CurrentUser);
+
+            ProjectHistories.Clear();
+            var histories = DbService.ProjectsHistories
+                .OrderByDescending(h => h.CreatedAt)
+                .ToList();
+            foreach (var h in histories) ProjectHistories.Add(h);
         }
-        public void edit(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            Project project = button?.Tag as Project;
-            var popupWindow = new EditProjectWindow(project);
-            popupWindow.Owner = Window.GetWindow(this);
-            popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            popupWindow.ShowDialog(); // или Show() для неблокирующего
 
+        private void EditProject(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Project project)
+            {
+                var popupWindow = new EditProjectWindow(project);
+                popupWindow.Owner = Window.GetWindow(this);
+                popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                popupWindow.ShowDialog();
+
+                DbService.Commit();
+                DbService.LoadUserProjects(CurrentUser);
+
+                ProjectHistories.Clear();
+                var histories = DbService.ProjectsHistories
+                    .OrderByDescending(h => h.CreatedAt)
+                    .ToList();
+                foreach (var h in histories) ProjectHistories.Add(h);
+            }
         }
-       
 
-
-        public void remove(object sender, EventArgs e)
+        private void RemoveProject(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            Project project = button?.Tag as Project;
-          
-                if (MessageBox.Show("При удалении проекта вы также удаляете\nучастников, задачи и всю связанную историю, удалить?", "Подтверждение удаления",
-                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (sender is Button button && button.Tag is Project project)
+            {
+                var result = MessageBox.Show(
+                    $"Удалить проект «{project.Title}»?",
+                    "Подтверждение",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
                 {
-                    ProjectsServices.Remove(project);
+
+                    DbService.RemoveProject(project);
+                    DbService.Commit();
+                    DbService.LoadUserProjects(CurrentUser);
+
+                    ProjectHistories.Clear();
+                    var histories = DbService.ProjectsHistories
+                        .OrderByDescending(h => h.CreatedAt)
+                        .ToList();
+                    foreach (var h in histories) ProjectHistories.Add(h);
                 }
-           
-        }
-        public void users(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new TeamPage());
+            }
         }
 
-        private void leftHistory(object sender, MouseButtonEventArgs e)
+        private void ShowUsersPage(object sender, RoutedEventArgs e)
         {
-            var border = sender as Border;
-            ProjectsHistory projectHistory = border?.Tag as ProjectsHistory;
-            NavigationService.Navigate(new ProjectPage(projectHistory.Project));
+            NavigationService?.Navigate(new TeamPage());
         }
 
-        private void rightHistory(object sender, MouseButtonEventArgs e)
+        private void LeftHistoryClick(object sender, MouseButtonEventArgs e)
         {
-            var border = sender as Border;
-            ProjectsHistory projectHistory = border?.Tag as ProjectsHistory;
-            NavigationService.Navigate(new ProjectUserPage(projectHistory.Projectuser));
+            if (sender is Border border && border.Tag is ProjectsHistory history && history.Project != null)
+            {
+                NavigationService?.Navigate(new ProjectPage(history.Project));
+            }
+        }
+
+        private void RightHistoryClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.Tag is ProjectsHistory history && history.Projectuser != null)
+            {
+                NavigationService?.Navigate(new ProjectUserPage(history.Projectuser));
+            }
         }
     }
 }

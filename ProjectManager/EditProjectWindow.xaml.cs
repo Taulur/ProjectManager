@@ -45,6 +45,9 @@ namespace ProjectManager
 
                 project = _project;
 
+
+                projectUser = CurrentUser.ProjectUserByProject(project);
+
                 projectHistory.Data = new ProjectInformation
                 {
                     Title = project.LastVersion.Data.Title,
@@ -90,7 +93,7 @@ namespace ProjectManager
                 {
                     Action = projectsServices.Actions[1],
                     Project = project,
-                    Projectuser = projectHistory.Projectuser,
+                    Projectuser = projectUser,
                     Data = data,
                     CreatedAt = DateTime.Now,
                 };
@@ -99,13 +102,15 @@ namespace ProjectManager
             }
             else
             {
-                // ПРИ СОЗДАНИИ ПРОЕКТА ПЕРВЫЙ ПОЛЬЗОВАТЕЛЮ ПРИСВАЕВАЕТСЯ РУКОВОДИТЕЛЬ ПРОЕКТА И ЗАНОСИТСЯ В УЧАСТНИКИ
+
+               
+                
                 projectUser.Project = project;
                 projectUser.Role = rolesService.Roles[1];
-                projectUser.User = usersServices.Users[0];
+                projectUser.User = CurrentUser.User;
                 projectUser.CreatedAt = DateTime.Now;
 
-                // В ИСТОРИЮ ИЗМЕНЕНИЯ ТОТ КТО ИЗМЕНИЛ ЗАНОСИТСЯ ПОКА ЧТО ПЕРВЫЙ УЧАСТНИК ПРОЕКТА
+               
                 project.CreatedAt = DateTime.Now;
                 projectHistory.Data.Color = selectedColor;
                 projectHistory.Action = projectsServices.Actions[0];
