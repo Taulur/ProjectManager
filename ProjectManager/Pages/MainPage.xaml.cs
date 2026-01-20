@@ -75,8 +75,6 @@ namespace ProjectManager.Pages
 
             if (ProjectSearchQuery != null && !project.LastVersion.DisplayTitle.Contains(ProjectSearchQuery, StringComparison.CurrentCultureIgnoreCase))
                 return false;
-
-
             return true;
         }
 

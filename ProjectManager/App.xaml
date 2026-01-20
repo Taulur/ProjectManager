@@ -19,22 +19,13 @@
                 <Setter Property="AutomationProperties.Name" Value="" />
             </Style>
 
-
+            
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-                <materialDesign:BundledTheme BaseTheme="Light"/>
-                <materialDesign:BundledTheme PrimaryColor="LightBlue"/>
-                <materialDesign:BundledTheme SecondaryColor="Green"/>
-
-                <!--<ResourceDictionary>
-                <SolidColorBrush x:Key="MaterialDesign.Brush.Primary" Color="#00fa9a"/>
-                <SolidColorBrush x:Key="MaterialDesign.Brush.Primary.Foreground" Color="#000"/>
-                <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary" Color="#7FFF00" />
-                <SolidColorBrush x:Key="MaterialDesign.Brush.Secondary.Foreground" Color="#fff" />
-            </ResourceDictionary>-->
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml"/>
                 <ResourceDictionary Source="/Style/Main.xaml"/>
-
+                <!-- или MaterialDesignTheme.TextBox если хочешь только для TextBox -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

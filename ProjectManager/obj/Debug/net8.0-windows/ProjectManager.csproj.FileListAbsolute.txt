@@ -185,3 +185,5 @@ C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditTaskWin
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\ProjectManager.sourcelink.json
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthPage.g.cs
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthPage.baml
+C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\ProjectManager.dll.config
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs

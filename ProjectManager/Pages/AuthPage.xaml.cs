@@ -23,10 +23,13 @@ namespace ProjectManager.Pages
     public partial class AuthPage : Page
     {
         private DbService data { get; set; } = new();
+        public string Username { get; set; }
+        public string Password { get; set; }
         public AuthPage()
         {
             data.GetAll();
             InitializeComponent();
+            DataContext = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,9 +37,9 @@ namespace ProjectManager.Pages
            
             foreach (User user in data.Users)
             {
-                if (usernameBox.Text == user.Username)
+                if (Username == user.Username)
                 {
-                    if (passwordBox.Password == user.Password)
+                    if (Password == user.Password)
                     {
                        
                         CurrentUser.User = user;
@@ -44,10 +47,22 @@ namespace ProjectManager.Pages
                     }
                     else
                     {
-                        MessageBox.Show("пароль неоч");
+                        MainSnackbar.MessageQueue?.Enqueue(
+                      "Неверный логин или пароль",
+                      null,             
+                      null,             
+                      null,            
+                      false,            
+                      true,              
+                      TimeSpan.FromSeconds(4)  
+                  );
                     }
                 }
-              
+                else
+                {
+                   
+                }
+
             }
         }
     }

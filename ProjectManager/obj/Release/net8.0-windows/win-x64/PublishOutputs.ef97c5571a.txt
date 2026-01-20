@@ -1,0 +1,2 @@
+C:\Учеба\ProjectManager\ProjectManagerApp\ProjectManager.pdb
+C:\Учеба\ProjectManager\ProjectManagerApp\ProjectManager.exe

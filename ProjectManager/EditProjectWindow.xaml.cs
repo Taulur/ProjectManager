@@ -70,7 +70,7 @@ namespace ProjectManager
                 TitleWindow = "Создание проекта";
                 HintWindow = "При создании проекта вы становитесь его менеджером.";
             }
-                
+
 
 
 
@@ -103,14 +103,14 @@ namespace ProjectManager
             else
             {
 
-               
-                
+
+
                 projectUser.Project = project;
                 projectUser.Role = rolesService.Roles[1];
                 projectUser.User = CurrentUser.User;
                 projectUser.CreatedAt = DateTime.Now;
 
-               
+
                 project.CreatedAt = DateTime.Now;
                 projectHistory.Data.Color = selectedColor;
                 projectHistory.Action = projectsServices.Actions[0];
@@ -152,9 +152,5 @@ namespace ProjectManager
             selectedColor = border?.Tag as string;
 
         }
-
-       
-
-       
     }
 }

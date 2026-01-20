@@ -6,9 +6,11 @@
       xmlns:local="clr-namespace:ProjectManager.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
+      xmlns:val="clr-namespace:ProjectManager.ValidationRules"
       d:DesignHeight="700" d:DesignWidth="1250"
       Title="AuthPage">
-
+    
+  
     <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,8 +24,32 @@
             </materialDesign:TransitioningContent.OpeningEffects>
             <StackPanel >
                 <Label Margin="10" Content="📋 Менеджер проектов" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="45"/>
-                <TextBox  Margin="10" Text="Administrator" x:Name="usernameBox" materialDesign:HintAssist.Hint="Username"  materialDesign:HintAssist.IsFloating="True" FontSize="25"/>
-                <PasswordBox Margin="10" x:Name="passwordBox" materialDesign:HintAssist.Hint="Password"  materialDesign:HintAssist.IsFloating="True" FontSize="25"/>
+                <TextBox Margin="10"
+         materialDesign:HintAssist.Hint="Username"
+         materialDesign:HintAssist.IsFloating="True"
+         materialDesign:ValidationAssist.UsePopup="False"
+         materialDesign:ValidationAssist.OnlyShowOnFocus="True"
+         FontSize="25">
+                    <TextBox.Text>
+                        <Binding Path="Username" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:LoginValidation/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <PasswordBox Margin="10" materialDesign:HintAssist.Hint="Password"  materialDesign:HintAssist.IsFloating="True" FontSize="25"
+ materialDesign:ValidationAssist.UsePopup="False"
+ materialDesign:ValidationAssist.OnlyShowOnFocus="True">
+                    <materialDesign:PasswordBoxAssist.Password>
+                        <Binding Path="Password"
+             UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:PasswordValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </materialDesign:PasswordBoxAssist.Password>
+                </PasswordBox>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -34,10 +60,19 @@
 
 
                     </Grid.RowDefinitions>
-                    <Button Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:RippleAssist.Feedback="AliceBlue" Background="RoyalBlue" Foreground="White" materialDesign:ButtonAssist.CornerRadius="15"  Click="Button_Click" Width="Auto" Height="Auto" FontSize="35" Content="Войти" Margin="10" Grid.Column="1"/>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:RippleAssist.Feedback="DarkRed"
+                            Background="RoyalBlue" Foreground="White" materialDesign:ButtonAssist.CornerRadius="15"  Click="Button_Click" Width="Auto" Height="Auto" FontSize="35" Content="Войти" Margin="10" Grid.Column="1"/>
 
                 </Grid>
             </StackPanel>
         </materialDesign:TransitioningContent>
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+                           Grid.Column="1"            
+            HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           Margin="16"
+                           MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>
+  
 </Page>

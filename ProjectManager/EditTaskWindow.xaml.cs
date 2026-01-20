@@ -97,6 +97,11 @@ namespace ProjectManager
                 .Where(pu => pu.Id != projectUser.Id && pu.Role.Title != "manager") 
                 .ToList();
 
+            if (candidates.Count == 0)
+            {
+                return project.ProjectUsers.First();
+            }
+
             if (candidates.Count == 1)
             {
                 return candidates[0];
@@ -104,7 +109,7 @@ namespace ProjectManager
 
             if (!candidates.Any())
             {
-                return null; // Нет кандидатов
+                return null; 
                 
             }
 
@@ -136,41 +141,31 @@ namespace ProjectManager
                 double timeSinceLast = lastAssignmentTime.HasValue
                     ? (now - lastAssignmentTime.Value).TotalDays
                     : double.MaxValue / 2; 
-
                 candidateData[user] = (load, experience, timeSinceLast);
-
                 if (experience > maxExperience) maxExperience = experience;
                 if (timeSinceLast > maxTimeSinceLast) maxTimeSinceLast = timeSinceLast;
                 if (load > maxLoad) maxLoad = load;
             }
-
             const double weightLoad = 0.4;
             const double weightExp = 0.3;
             const double weightTime = 0.3;
 
             ProjectUser bestUser = null;
             double bestScore = double.MinValue;
-
             foreach (var kvp in candidateData)
             {
                 var user = kvp.Key;
                 var (load, experience, timeSinceLast) = kvp.Value;
-
                 double loadScore = maxLoad > 0 ? 1.0 - (load / (double)maxLoad) : 1.0;
-
                 double expScore = maxExperience > 0 ? experience / (double)maxExperience : 0.0;
-
                 double timeScore = maxTimeSinceLast > 0 ? timeSinceLast / maxTimeSinceLast : 1.0; 
-
                 double totalScore = (weightLoad * loadScore) + (weightExp * expScore) + (weightTime * timeScore);
-
                 if (totalScore > bestScore)
                 {
                     bestScore = totalScore;
                     bestUser = user;
                 }
             }
-
             return bestUser;
         }
 
