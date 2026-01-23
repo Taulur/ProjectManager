@@ -71,7 +71,7 @@ namespace ProjectManager
                 HintWindow = "При создании проекта вы становитесь его менеджером.";
             }
 
-
+            DataContext = this;
 
 
             InitializeComponent();
@@ -79,50 +79,62 @@ namespace ProjectManager
 
         private void Execute(object sender, RoutedEventArgs e)
         {
-            if (isEdit)
+            if (projectHistory.Data.Title != null && projectHistory.Data.Description != null)
             {
-
-                ProjectInformation data = new ProjectInformation
+                if (isEdit)
                 {
-                    Title = projectHistory.Data.Title,
-                    Description = projectHistory.Data.Description,
-                    Color = selectedColor,
-                };
+                    ProjectInformation data = new ProjectInformation
+                    {
+                        Title = projectHistory.Data.Title,
+                        Description = projectHistory.Data.Description,
+                        Color = selectedColor,
+                    };
 
-                ProjectsHistory tempProjectHistory = new ProjectsHistory
+                    ProjectsHistory tempProjectHistory = new ProjectsHistory
+                    {
+                        Action = projectsServices.Actions[1],
+                        Project = project,
+                        Projectuser = projectUser,
+                        Data = data,
+                        CreatedAt = DateTime.Now,
+                    };
+
+                    projectsServices.Add(tempProjectHistory);
+                }
+                else
                 {
-                    Action = projectsServices.Actions[1],
-                    Project = project,
-                    Projectuser = projectUser,
-                    Data = data,
-                    CreatedAt = DateTime.Now,
-                };
+                    projectUser.Project = project;
+                    projectUser.Role = rolesService.Roles[1];
+                    projectUser.User = CurrentUser.User;
+                    projectUser.CreatedAt = DateTime.Now;
 
-                projectsServices.Add(tempProjectHistory);
+                    project.CreatedAt = DateTime.Now;
+                    projectHistory.Data.Color = selectedColor;
+                    projectHistory.Action = projectsServices.Actions[0];
+                    projectHistory.Projectuser = projectUser;
+                    projectHistory.Project = project;
+                    projectHistory.CreatedAt = DateTime.Now;
+
+                    projectsServices.Add(projectHistory);
+                }
+                this.Close();
             }
             else
             {
-
-
-
-                projectUser.Project = project;
-                projectUser.Role = rolesService.Roles[1];
-                projectUser.User = CurrentUser.User;
-                projectUser.CreatedAt = DateTime.Now;
-
-
-                project.CreatedAt = DateTime.Now;
-                projectHistory.Data.Color = selectedColor;
-                projectHistory.Action = projectsServices.Actions[0];
-                projectHistory.Projectuser = projectUser;
-                projectHistory.Project = project;
-                projectHistory.CreatedAt = DateTime.Now;
-
-                projectsServices.Add(projectHistory);
-
-
+                Snackbar("Выполните все условия");
             }
-            this.Close();
+        }
+
+        void Snackbar(string message)
+        {
+            MainSnackbar.MessageQueue?.Enqueue(
+                        message,
+                        null,
+                        null,
+                        null,
+                        false,
+                        true,
+                        TimeSpan.FromSeconds(0.5));
         }
 
         private void Back(object sender, RoutedEventArgs e)

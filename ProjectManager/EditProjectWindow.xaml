@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectManager"
         mc:Ignorable="d"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="EditProjectWindow" Height="575" Width="300" ResizeMode="NoResize">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:val="clr-namespace:ProjectManager.ValidationRules"
+        Title="Взаимодействие с проектом" Icon="/folder-plus.ico" Height="575" Width="300" ResizeMode="NoResize">
     <Window.Resources>
         <DataTemplate x:Key="ColorTemplate">
             <Border Style="{StaticResource ShadowBorder}" CornerRadius="10" Height="50" Width="50" Margin="5" MouseLeftButtonDown="EditChoseColor" Background="{Binding}" Tag="{Binding}" Cursor="Hand"/>
@@ -21,13 +22,37 @@
                 <StackPanel>
                     <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📁 Название проекта"/>
                     <Border Style="{StaticResource ShadowBorder}">
-                        <TextBox  Margin="5" Text="{Binding projectHistory.Data.Title}"></TextBox>
+                        <TextBox Margin="5"
+materialDesign:HintAssist.Hint="Название"
+materialDesign:HintAssist.IsFloating="True"
+materialDesign:ValidationAssist.UsePopup="False"
+materialDesign:ValidationAssist.OnlyShowOnFocus="True">
+                            <TextBox.Text>
+                                <Binding Path="projectHistory.Data.Title" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:MainValidation/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </Border>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Margin="5" FontSize="12" FontWeight="SemiBold" Text="📋 Описание проекта"/>
                     <Border Style="{StaticResource ShadowBorder}">
-                        <TextBox TextWrapping="Wrap" Height="50" MaxWidth="250" Margin="5" Text="{Binding projectHistory.Data.Description}"></TextBox>
+                        <TextBox TextWrapping="Wrap" Height="50" MaxWidth="250" Margin="5"
+materialDesign:HintAssist.Hint="Описание"
+materialDesign:HintAssist.IsFloating="True"
+materialDesign:ValidationAssist.UsePopup="False"
+materialDesign:ValidationAssist.OnlyShowOnFocus="True">
+                            <TextBox.Text>
+                                <Binding Path="projectHistory.Data.Description" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:DescValidation/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </Border>
                 </StackPanel>
                 <StackPanel>
@@ -58,6 +83,11 @@
                 <Button Margin="5" Click="Back" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
             </StackPanel>
         </Border>
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+                              
+      HorizontalAlignment="Center"
+                     VerticalAlignment="Bottom"
+                     MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>
 
 </Window>

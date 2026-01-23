@@ -32,38 +32,51 @@ namespace ProjectManager.Pages
             DataContext = this;
         }
 
+        void Snackbar(string message)
+        {
+            MainSnackbar.MessageQueue?.Enqueue(
+                        message,
+                        null,
+                        null,
+                        null,
+                        false,
+                        true,
+                        TimeSpan.FromSeconds(0.5));
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           
-            foreach (User user in data.Users)
+           if (Username != null &&  Password != null)
             {
-                if (Username == user.Username)
+                foreach (User user in data.Users)
                 {
-                    if (Password == user.Password)
+                    if (Username == user.Username)
                     {
-                       
-                        CurrentUser.User = user;
-                        NavigationService.Navigate(new MainPage());
+                        if (Password == user.Password)
+                        {
+
+                            CurrentUser.User = user;
+                            NavigationService.Navigate(new MainPage());
+                        }
+                        else
+                        {
+                            Snackbar("Неверный пароль");
+                        }
                     }
                     else
                     {
-                        MainSnackbar.MessageQueue?.Enqueue(
-                      "Неверный логин или пароль",
-                      null,             
-                      null,             
-                      null,            
-                      false,            
-                      true,              
-                      TimeSpan.FromSeconds(4)  
-                  );
+                        Snackbar("Пользователь не найден");
                     }
-                }
-                else
-                {
-                   
+
                 }
 
             }
+           else
+            {
+                Snackbar("Выполните все условия");
+            }
+
+            
         }
     }
 }

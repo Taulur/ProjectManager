@@ -82,10 +82,11 @@ namespace ProjectManager
                 taskHistory.Data = new();
                 taskHistory.Data.DueDate = DateTime.Now;
                 TitleWindow = "Создание задачи";
-                HintWindow = $"Автоматически был выбран самый подходяший участник\nПользователь: {selectedUser.User.Username}\nФИО : {selectedUser.User.Fullname}";
+                HintWindow = $"Автоматически был выбран самый подходяший участник\nПользователь: {selectedUser.User.Username}";
             }
 
             InitializeComponent();
+            DataContext = this;
             
         }
 
@@ -171,80 +172,102 @@ namespace ProjectManager
 
         private void Execute(object sender, RoutedEventArgs e)
         {
-
-            foreach (var status in tasksService.Statuses)
+            if (taskHistory.Data.Title != null && taskHistory.Data.Description != null)
             {
-                if (status.Id == statusId)
+                foreach (var status in tasksService.Statuses)
                 {
-                    taskHistory.Data.Status = status;
-                    break;
+                    if (status.Id == statusId)
+                    {
+                        taskHistory.Data.Status = status;
+                        break;
+                    }
                 }
-            }
-            foreach (var priority in tasksService.Priorities)
-            {
-                if (priority.Id == priorityId)
+                foreach (var priority in tasksService.Priorities)
                 {
-                    taskHistory.Data.Priority = priority;
-                    break;
+                    if (priority.Id == priorityId)
+                    {
+                        taskHistory.Data.Priority = priority;
+                        break;
+                    }
                 }
-            }
 
-   
-            if (!isEdit && selectedUser == null && priorityId != -1)
-            {
-                selectedUser = GetBestAssignedUser(priorityId);
-            }
 
-            if (isEdit)
-            {
-
-                TaskInformation data = new TaskInformation
+                if (!isEdit && selectedUser == null && priorityId != -1)
                 {
-                    Title = taskHistory.Data.Title,
-                    Description = taskHistory.Data.Description,
-                    DueDate = taskHistory.Data.DueDate,
-                    Status = taskHistory.Data.Status,
-                    Priority = taskHistory.Data.Priority,
-                    Assignedto = selectedUser,
-                    Color = selectedColor,
+                    selectedUser = GetBestAssignedUser(priorityId);
+                }
 
-                };
-
-                TasksHistory newTaskHistory = new TasksHistory
+                if (isEdit)
                 {
-                    Action = tasksService.Actions[1],
-                    Task = task,
-                    Data = data,
-                    Projectuser = projectUser,
-                    CreatedAt = DateTime.Now,
-                };
+                    if (selectedUser == null)
+                    {
+                        selectedUser = taskHistory.Data.Assignedto;
+                    }
 
-                tasksService.Add(newTaskHistory);
+                        TaskInformation data = new TaskInformation
+                    {
+                        Title = taskHistory.Data.Title,
+                        Description = taskHistory.Data.Description,
+                        DueDate = taskHistory.Data.DueDate,
+                        Status = taskHistory.Data.Status,
+                        Priority = taskHistory.Data.Priority,
+                        Assignedto = selectedUser,
+                        Color = selectedColor,
+
+                    };
+
+                    TasksHistory newTaskHistory = new TasksHistory
+                    {
+                        Action = tasksService.Actions[1],
+                        Task = task,
+                        Data = data,
+                        Projectuser = projectUser,
+                        CreatedAt = DateTime.Now,
+                    };
+
+                    tasksService.Add(newTaskHistory);
+                }
+                else
+                {
+
+                    if (statusId != -1 && priorityId != -1)
+                    {
+                        taskHistory.Action = tasksService.Actions[0];
+                        taskHistory.Task = task;
+                        taskHistory.CreatedAt = DateTime.Now;
+                        taskHistory.Data.Assignedto = selectedUser;
+                        taskHistory.Data.Color = selectedColor;
+                        task.Createdby = projectUser;
+                        task.CreatedAt = DateTime.Now;
+                        task.Project = project;
+
+                        tasksService.Add(taskHistory);
+
+                    }
+
+                }
+                this.Close();
             }
             else
             {
-
-                if (statusId != -1 && priorityId != -1)
-                {
-                    taskHistory.Action = tasksService.Actions[0];
-                    taskHistory.Task = task;
-                    taskHistory.CreatedAt = DateTime.Now;
-                    taskHistory.Data.Assignedto = selectedUser;
-                    taskHistory.Data.Color = selectedColor;
-                    task.Createdby = projectUser;
-                    task.CreatedAt = DateTime.Now;
-                    task.Project = project;
-
-                    tasksService.Add(taskHistory);
-
-                }
-
+                Snackbar("Выполните все условия");
             }
-            this.Close();
+
+          
 
         }
 
-
+        void Snackbar(string message)
+        {
+            MainSnackbar.MessageQueue?.Enqueue(
+                        message,
+                        null,
+                        null,
+                        null,
+                        false,
+                        true,
+                        TimeSpan.FromSeconds(0.5));
+        }
 
         private void Back(object sender, RoutedEventArgs e)
         {

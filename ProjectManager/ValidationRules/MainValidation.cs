@@ -18,13 +18,13 @@ namespace ProjectManager.ValidationRules;
             {
                 return new ValidationResult(false, "Ввод информации в поле обязателен");
             }
-            if (input.Length <= 1)
+            if (input.Length <= 2)
             {
-                return new ValidationResult(false, "Должно быть больше одного символа");
+                return new ValidationResult(false, "Должно быть больше двух символов");
             }
-        if (input.Length >= 99)
+        if (input.Length >= 20)
         {
-            return new ValidationResult(false, "Должно быть менее ста символов");
+            return new ValidationResult(false, "Должно быть менее двадцати символов");
         }
         return ValidationResult.ValidResult;
         }

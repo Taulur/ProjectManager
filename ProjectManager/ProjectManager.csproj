@@ -8,6 +8,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="card-plus.ico" />
+    <None Remove="folder-edit.ico" />
+    <None Remove="folder-plus.ico" />
+  </ItemGroup>
+
 
 
 
@@ -34,6 +40,20 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+
+
+
+
+
+
+
+  <ItemGroup>
+    <Resource Include="account-group.ico" />
+    <Resource Include="card-plus.ico" />
+    <Resource Include="folder-edit.ico" />
+    <Resource Include="folder-plus.ico" />
   </ItemGroup>
 
 </Project>

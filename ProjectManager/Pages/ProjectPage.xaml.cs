@@ -76,6 +76,7 @@ namespace ProjectManager.Pages
 
             UsersFilter.Add("По количеству задач");
 
+            TasksFilter.Add("По приоритету");
             TasksFilter.Add("По дате выполнения");
             TasksFilter.Add("По дате изменения");
             TasksFilter.Add("По дате создания");
@@ -117,6 +118,14 @@ namespace ProjectManager.Pages
                 {
                     switch (selected)
                     {
+                        case "По приоритету":
+                            tasksWaitingView.SortDescriptions.Add(new SortDescription("LastVersion.Data.Priority.Id",
+                            ListSortDirection.Ascending));
+                            tasksActiveView.SortDescriptions.Add(new SortDescription("LastVersion.Data.Priority.Id",
+                           ListSortDirection.Ascending));
+                            tasksCompletedView.SortDescriptions.Add(new SortDescription("LastVersion.Data.Priority.Id",
+                          ListSortDirection.Ascending));
+                            break;
                         case "По дате изменения":
                             tasksWaitingView.SortDescriptions.Add(new SortDescription("LastVersion.CreatedAt",
                             ListSortDirection.Descending));

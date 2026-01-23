@@ -112,7 +112,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Button Height="50" FontSize="20"  Cursor="Hand" Click="GoToProject_Click" Content="📂 Проекты"/>
+                    <Button Height="50" FontSize="20"  Cursor="Hand" Click="GoToProject_Click" Content="📂 Проект"/>
                     <Button Height="50" FontSize="20"  Cursor="Hand" Click="GoToProjectUsers_Click" Content="👥 Участники"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">

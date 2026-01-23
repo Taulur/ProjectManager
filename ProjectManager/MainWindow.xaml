@@ -6,6 +6,6 @@
         xmlns:local="clr-namespace:ProjectManager"
 
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1250">
+        Title="Project Manager" Icon="/account-group.ico" Height="700" Width="1250">
     <Frame NavigationUIVisibility="Hidden" Source="Pages/AuthPage.xaml"/>
 </Window>
