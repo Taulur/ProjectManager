@@ -101,7 +101,7 @@
 
    connectionString="Server=localhost;Database=ProjectManagerDB;Integrated Security=true;TrustServerCertificate=True;"
 
-   providerName="System.Data.SqlClient" />
+   providerName="System.Data.SqlClient"/>
 
 </connectionStrings>
 
@@ -119,7 +119,7 @@
 
 
 
-Логин: Administrator   Пароль: Pass123!
+Логин: Administrator   Пароль: Pass1234
   
 
 ### Приятной работы с проектами!
