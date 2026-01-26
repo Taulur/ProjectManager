@@ -2,9 +2,11 @@
 using ProjectManager.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -18,6 +20,9 @@ namespace ProjectManager.Pages
         public ObservableCollection<Comment> Comments { get; set; } = new();
 
         public Comment NewComment { get; set; } = new() { Text = "" };
+
+        public string HistorySearchQuery { get; set; } = null!;
+        public ICollectionView historiesView { get; set; }
 
         private ProjectUser CurrentUser => Models.CurrentUser.ProjectUserByProject(Task.Project);
 
@@ -42,10 +47,25 @@ namespace ProjectManager.Pages
                 Comments.Add(c);
             }
 
+            historiesView = CollectionViewSource.GetDefaultView(TaskHistories);
+            historiesView.Filter = FilterHistories;
+
             InitializeComponent();
             DataContext = this;
 
             DbService.GetAll();
+        }
+
+        public bool FilterHistories(object obj)
+        {
+            if (obj is not TasksHistory)
+                return false;
+
+            var temp = (TasksHistory)obj;
+
+            if (HistorySearchQuery != null && !temp.DisplayText.Contains(HistorySearchQuery, StringComparison.CurrentCultureIgnoreCase))
+                return false;
+            return true;
         }
 
         private void AddComment_Click(object sender, RoutedEventArgs e)
@@ -69,14 +89,13 @@ namespace ProjectManager.Pages
                 ProjectuserId = CurrentUser.Id,
                 Projectuser = CurrentUser,
                 Text = NewComment.Text.Trim(),
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
 
-            DbService.Comments.Add(comment);
+            DbService.Add(comment);
             Comments.Add(comment);
-            DbService.Commit();
 
-            NewComment.Text = " ";
+            NewComment.Text = "";
         }
 
 
@@ -108,7 +127,7 @@ namespace ProjectManager.Pages
 
                 DbService.RemoveTask(Task);
                 DbService.Commit();
-                NavigationService?.GoBack();
+                NavigationService?.Navigate(new ProjectPage(Task.Project));
             }
            
         }
@@ -161,6 +180,19 @@ namespace ProjectManager.Pages
             {
                 NavigationService?.Navigate(new ProjectUserPage(assignee));
             }
+        }
+
+        private void historytBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            historiesView.Refresh();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            historytBox.Text = string.Empty;
+            if (HistorySearchQuery != null)
+                HistorySearchQuery = string.Empty;
+            historiesView.Refresh();
         }
     }
 }

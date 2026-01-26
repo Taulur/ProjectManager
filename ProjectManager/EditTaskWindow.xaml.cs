@@ -34,8 +34,6 @@ namespace ProjectManager
 
         public TasksHistory taskHistory { get; set; } = new();
 
-        public int statusId { get; set; } = -1;
-        public int priorityId { get; set; } = -1;
         bool isEdit = false;
         string selectedColor = "Red";
         public ProjectUser selectedUser { get; set; } = new();
@@ -43,6 +41,39 @@ namespace ProjectManager
 
         public string TitleWindow { get; set; }
         public string HintWindow { get; set; }
+
+        public int SelectedStatusId
+        {
+            get => task?.LastVersion.Data.StatusId ?? 0;
+            set
+            {
+                if (task == null || value == task?.LastVersion.Data.StatusId) return;
+                var newRole = tasksService.Statuses.FirstOrDefault(r => r.Id == value);
+                if (newRole != null)
+                {
+                    task.LastVersion.Data.Status = newRole;
+                    task.LastVersion.Data.StatusId = newRole.Id;
+                    tasksService.Commit();
+                }
+            }
+        }
+
+        public int SelectedPriorityId
+        {
+            get => task?.LastVersion.Data.PriorityId ?? 0;
+            set
+            {
+                if (task == null || value == task?.LastVersion.Data.PriorityId) return;
+
+                var newRole = tasksService.Priorities.FirstOrDefault(r => r.Id == value);
+                if (newRole != null)
+                {
+                    task.LastVersion.Data.Priority = newRole;
+                    task.LastVersion.Data.PriorityId = newRole.Id;
+                    tasksService.Commit();
+                }
+            }
+        }
 
         public EditTaskWindow(Project _project, Models.Task? _task = null)
         {
@@ -174,27 +205,12 @@ namespace ProjectManager
         {
             if (taskHistory.Data.Title != null && taskHistory.Data.Description != null)
             {
-                foreach (var status in tasksService.Statuses)
-                {
-                    if (status.Id == statusId)
-                    {
-                        taskHistory.Data.Status = status;
-                        break;
-                    }
-                }
-                foreach (var priority in tasksService.Priorities)
-                {
-                    if (priority.Id == priorityId)
-                    {
-                        taskHistory.Data.Priority = priority;
-                        break;
-                    }
-                }
+                
 
 
-                if (!isEdit && selectedUser == null && priorityId != -1)
+                if (!isEdit && selectedUser == null)
                 {
-                    selectedUser = GetBestAssignedUser(priorityId);
+                    selectedUser = GetBestAssignedUser(5);
                 }
 
                 if (isEdit)
@@ -230,8 +246,7 @@ namespace ProjectManager
                 else
                 {
 
-                    if (statusId != -1 && priorityId != -1)
-                    {
+
                         taskHistory.Action = tasksService.Actions[0];
                         taskHistory.Task = task;
                         taskHistory.CreatedAt = DateTime.Now;
@@ -240,10 +255,7 @@ namespace ProjectManager
                         task.Createdby = projectUser;
                         task.CreatedAt = DateTime.Now;
                         task.Project = project;
-
                         tasksService.Add(taskHistory);
-
-                    }
 
                 }
                 this.Close();

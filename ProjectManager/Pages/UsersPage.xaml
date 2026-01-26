@@ -4,66 +4,101 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1250"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}"
       Title="TeamPage">
     <Page.Resources>
-        <DataTemplate x:Key="UserCardTemplate">
-            <Border CornerRadius="8" BorderThickness="1">
+        <DataTemplate x:Key="UserTemplate">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="3" Height="85" Background="AliceBlue" CornerRadius="15" Cursor="Hand" Tag="{Binding}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.9*"/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="Black">
-                        <TextBlock Text="Y" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                    <Border Grid.Column="0" Margin="3" CornerRadius="100" Height="50" Width="50" Background="RoyalBlue">
+                        <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding FirstWord}"/>
                     </Border>
-                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Username}" FontWeight="SemiBold" FontSize="16" />
-                            <TextBlock Text="{Binding Systemrole.Title}"  Padding="4,2" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="12"/>
+                            <TextBlock   Text="👨‍💼 ФИО : "/>
+                            <TextBlock  Text="{Binding Fullname}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding Fullname}" Foreground="#6B7280" Margin="0,4,0,0" FontSize="12"/>
-                        <TextBlock Text="Кол-во проектов" Foreground="#6B7280" Margin="0,4,0,0" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="👨‍💼 Username : "/>
+                            <TextBlock  Text="{Binding Username}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📅 Дата создания пользователя: "/>
+                            <TextBlock  Text="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📁 Количество проектов в которых участвует: "/>
+                            <TextBlock  Text="{Binding TotalProjects}"/>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="✏️" Click="edit" Tag="{Binding}"  Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
-                        <Button Content="🗑️" Click="remove" Tag="{Binding}" Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <TextBlock Text="👨‍💼 Роль: "/>
+                            <TextBlock Text="{Binding Systemrole.Title}"/>
+                        </StackPanel>
+                        <Grid Margin="5" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Grid.Column="0" Click="edit" Tag="{Binding}" Margin="5,0,0,0" Content="✏️ Изменить" Cursor="Hand"/>
+                          
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Border>
         </DataTemplate>
     </Page.Resources>
-    <Grid Background="AntiqueWhite">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="300"/>
-        </Grid.ColumnDefinitions>
-        
-        <StackPanel Grid.Column="0" Margin="20">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Пользователи (0)" />
-                <Button Click="add" Content="+ Добавить участника" />
-                <Button Click="back" Content="Вернуться" />
-            </StackPanel>
-            <ItemsControl 
-            ItemsSource="{Binding UsersServices.Users}" 
-            ItemTemplate="{StaticResource UserCardTemplate}"
-            HorizontalContentAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+    <StackPanel Style="{StaticResource PagePanel}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" VerticalAlignment="Center" Margin="15,5,5,5" FontSize="25" Text="📋Пользователи "/>
         </StackPanel>
-        <StackPanel Grid.Column="1">
-            <StackPanel>
-                <TextBlock  HorizontalAlignment="Center" Text="Список проектов пользователя"></TextBlock>
-              
-            </StackPanel>
+        <Border Style="{StaticResource TopBarBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button Height="50" FontSize="20"  Cursor=""  Content="📂 Проекты"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Height="50" FontSize="20"  Click="BackToMain" Cursor="Hand"  Content="↶ Вернуться"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Button Cursor="Hand" Click="add" HorizontalAlignment="Right" Content="➕ Новый пользователь"/>
+        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+            <TextBox Width="225" x:Name="usersBox"  TextChanged="usersBox_TextChanged" Text="{Binding UsersSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="14" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+            <Border Margin="3" Grid.Row="1" Grid.Column="0" Padding="3" BorderBrush="RoyalBlue" BorderThickness="1" CornerRadius="5"  >
+                <ComboBox x:Name="usersCombo" SelectionChanged="usersCombo_SelectionChanged" VerticalAlignment="Center" FontSize="12" Width="125" BorderThickness="0" ItemsSource="{Binding UsersFilter}" IsEditable="False" Margin="0,5"/>
+            </Border>
+            <Button Height="40" Click="Button_Click"   VerticalAlignment="Center" Margin="3" >
+                <materialDesign:PackIcon Height="25" Width="25" Kind="Refresh" />
+            </Button>
         </StackPanel>
-    </Grid>
+        <Border Style="{StaticResource MainBorder}">
+            <ScrollViewer MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
+                <ItemsControl ItemsSource="{Binding DbService.Users}" ItemTemplate="{StaticResource UserTemplate}" HorizontalContentAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel>
+
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </StackPanel>
 </Page>

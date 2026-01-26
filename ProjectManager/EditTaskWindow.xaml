@@ -119,7 +119,6 @@ materialDesign:ValidationAssist.OnlyShowOnFocus="True">
         IsTodayHighlighted="True"
     materialDesign:HintAssist.Hint="Выберите дату"
         SelectedDateFormat="Short"
-                            Text="{Binding taskHistory.Data.DueDate}"
         FontSize="14"
         Margin="5"
         VerticalContentAlignment="Center"/>
@@ -139,7 +138,7 @@ materialDesign:ValidationAssist.OnlyShowOnFocus="True">
 DisplayMemberPath="Title"
 SelectedValuePath="Id"
                                       materialDesign:HintAssist.Hint="Выберите статус"
-SelectedValue="{Binding statusId}"
+SelectedValue="{Binding SelectedStatusId}"
 IsEditable="True" Margin="0,5" IsReadOnly="True"/>
                         </StackPanel>
                         <StackPanel Margin="5" Grid.Column="2" Orientation="Vertical">
@@ -148,7 +147,7 @@ IsEditable="True" Margin="0,5" IsReadOnly="True"/>
 DisplayMemberPath="Title"
 SelectedValuePath="Id"
                                        materialDesign:HintAssist.Hint="Выберите приоритет"
-SelectedValue="{Binding priorityId}"
+SelectedValue="{Binding SelectedPriorityId}"
 IsEditable="True" Margin="0,5" IsReadOnly="True"/>
                         </StackPanel>
                     </Grid>
@@ -177,8 +176,11 @@ IsEditable="True" Margin="0,5" IsReadOnly="True"/>
                         <TextBlock Text="{Binding taskHistory.TimeAgo, StringFormat={}{0:HH:mm dd/MM/yyyy}}"></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <Button Margin="5" Click="Execute"  Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
-                <Button Margin="5" Click="Back" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Margin="5" Click="Execute"  Foreground="White" Height="35" FontWeight="SemiBold" Background="Green" Content="Выполнить"></Button>
+                    <Button Margin="5" Click="Back" Foreground="White" Height="35" FontWeight="SemiBold" Background="DarkRed" Content="Вернуться"></Button>
+                </StackPanel>
+               
             </StackPanel>
             <materialDesign:Snackbar Grid.Column="0" Grid.ColumnSpan="2" x:Name="MainSnackbar"
                         

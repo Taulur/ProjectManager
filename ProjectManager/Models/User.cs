@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace ProjectManager.Models;
 
@@ -21,6 +23,7 @@ namespace ProjectManager.Models;
 
         public virtual SystemRole Systemrole { get; set; } = null!;
 
+    [NotMapped]
     public string FirstWord
     {
         get
@@ -28,4 +31,7 @@ namespace ProjectManager.Models;
             return Username[0].ToString();
         }
     }
+
+    [NotMapped]
+    public int TotalProjects => ProjectUsers?.Count ?? 0;
 }

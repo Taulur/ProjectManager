@@ -255,7 +255,7 @@ Value="{Binding Task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Label HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="22" Content="💬Комменатрии" />
                             </StackPanel>
-                            <ScrollViewer Height="325   " Style="{StaticResource HistoryScrollViewer}">
+                            <ScrollViewer MaxHeight="165" Style="{StaticResource HistoryScrollViewer}">
                                 <ItemsControl ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentTemplate}" HorizontalContentAlignment="Stretch">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -286,7 +286,13 @@ Value="{Binding Task.ProgressPercentage, Mode=OneWay}" Minimum="0" Maximum="100"
                 <Border Style="{StaticResource HistoriesBorder}">
                     <StackPanel>
                         <Label HorizontalAlignment="Center" Foreground="Gray" FontSize="11" Content="Наведитесь для подробной информации"/>
-                        <ScrollViewer Style="{StaticResource HistoryScrollViewer}">
+                        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                            <TextBox x:Name="historytBox" Width="200"  TextChanged="historytBox_TextChanged" Text="{Binding HistorySearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="12" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                            <Button Click="Button_Click" Height="25" Width="50" VerticalAlignment="Center" Margin="3" >
+                                <materialDesign:PackIcon Height="20" Width="20" Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+                        <ScrollViewer MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
                             <ItemsControl ItemsSource="{Binding TaskHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>

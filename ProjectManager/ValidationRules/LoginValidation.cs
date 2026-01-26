@@ -12,29 +12,29 @@ using System.Windows.Controls;
 namespace ProjectManager.ValidationRules;
     public class LoginValidation : ValidationRule
 {
-    private DbService dbService = new();
-    public override ValidationResult Validate(object value, CultureInfo
-    cultureInfo)
+    public override ValidationResult Validate(object value, CultureInfo cultureInfo)
     {
-        var input = (value ?? "").ToString().Trim().ToLower();
-        if (input == string.Empty)
+
+
+        var input = (value ?? "").ToString().Trim();
+
+        if (string.IsNullOrEmpty(input))
+            return new ValidationResult(false, "Поле обязательно");
+
+        if (input.Length < 6)
+            return new ValidationResult(false, "Минимум 6 символов");
+
+        if (input.Length > 19)
+            return new ValidationResult(false, "Максимум 19 символов");
+
+        if (!input.All(c =>
+            (c >= 'a' && c <= 'z') ||
+            (c >= 'A' && c <= 'Z') ||
+            (c >= '0' && c <= '9')))
         {
-            return new ValidationResult(false, "Ввод информации в поле обязателен");
+            return new ValidationResult(false, "Только английские буквы и цифры");
         }
-        if (input.Length <= 5)
-        {
-            return new ValidationResult(false, "Должно быть больше пяти символов");
-        }
-        if (input.Length >= 20)
-        {
-            return new ValidationResult(false, "Должно быть менее двадцати символов");
-        }
-        dbService.GetAll();
-        foreach (User user in dbService.Users)
-        {
-            if (user.Username == input)
-                return new ValidationResult(false, "Такой пользователь уже существует");
-        }
+
         return ValidationResult.ValidResult;
     }
 

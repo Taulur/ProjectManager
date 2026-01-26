@@ -32,10 +32,7 @@ public partial class ProjectUser
 
     public virtual ICollection<TasksHistory> TasksHistories { get; set; } = new List<TasksHistory>();
 
-    public virtual User User { get; set; } = null!;
-
-    [NotMapped]
-    public int TotalAssignedTasks => Tasks?.Count ?? 0;
+    public virtual User User { get; set; } = null!; 
 
     [NotMapped]
     public int RemainingTasksToComplete
@@ -43,12 +40,34 @@ public partial class ProjectUser
         get
         {
             if (TaskInformations == null) return 0;
-
-            const int completedStatusId = 6; 
-
             return TaskInformations
-                .Where(ti => ti.StatusId != completedStatusId && ti.AssignedtoId == Id)
-                .Count();
+                .GroupBy(ti => ti.TasksHistories?.FirstOrDefault()?.TaskId ?? 0)
+                .Select(g => g
+                    .OrderByDescending(ti => ti.TasksHistories?.Max(h => h.CreatedAt) ?? DateTime.MinValue)
+                    .FirstOrDefault()
+                )
+                .Count(ti => ti != null && ti.AssignedtoId == Id);
+        }
+    }
+
+    [NotMapped]
+    public int TotalAssignedTasks
+    {
+        get
+        {
+            if (TaskInformations == null) return 0;
+            var uniqueTasksLatestInfo = TaskInformations
+                .GroupBy(ti => ti.TasksHistories.FirstOrDefault()?.Task?.Id ?? 0)
+                .Select(group => group
+                    .OrderByDescending(ti => ti.TasksHistories.Max(h => (DateTime?)h.CreatedAt) ?? DateTime.MinValue)
+                    .First()
+                )
+                .Where(ti => ti.AssignedtoId == Id)
+                .ToList();
+
+            const int COMPLETED = 6;
+
+            return uniqueTasksLatestInfo.Count(ti => ti.StatusId == COMPLETED);
         }
     }
     [NotMapped]

@@ -33,6 +33,34 @@ namespace ProjectManager.Services
           
         }
         public int Commit() => _db.SaveChanges();
+        public void Add(Comment comment)
+        {
+            var _comment = new Comment
+            {
+                TaskId = comment.TaskId,
+                Task = comment.Task,
+                ProjectuserId = comment.ProjectuserId,
+                Projectuser = comment.Projectuser,
+                Text = comment.Text,
+                CreatedAt = comment.CreatedAt,
+            };
+            _db.Add<Comment>(_comment);
+            Commit();
+        }
+        public void Add(User user)
+        {
+            var _user = new User
+            {
+                Username = user.Username,
+                Fullname = user.Fullname,
+                Password = user.Password,
+                CreatedAt = user.CreatedAt,
+                SystemroleId = user.SystemroleId,
+                Systemrole = user.Systemrole,
+            };
+            _db.Add<User>(_user);
+            Commit();
+        }
 
         public void RemoveProject(Project project)
         {
@@ -69,27 +97,27 @@ namespace ProjectManager.Services
             if (task == null) return;
 
             var comments = _db.Comments.Where(c => c.TaskId == task.Id).ToList();
-            foreach (var comment in comments)
-            {
-                _db.Comments.Remove(comment);
-                Comments.Remove(comment);
-            }
-            var taskHistories = _db.TasksHistories.Where(th => th.TaskId == task.Id).ToList();
-            foreach (var th in taskHistories)
-            {
-                if (th.Data != null)
-                {
-                    _db.TaskInformations.Remove(th.Data);
-                    TaskInformations.Remove(th.Data);
-                }
-                _db.TasksHistories.Remove(th);
-                TasksHistories.Remove(th);
-            }
+            _db.Comments.RemoveRange(comments);
+
+            var histories = _db.TasksHistories
+                .Include(th => th.Data)
+                .Where(th => th.TaskId == task.Id)
+                .ToList();
+
+            _db.TasksHistories.RemoveRange(histories);
+            var taskInformationsToDelete = histories
+                .Where(h => h.Data != null)
+                .Select(h => h.Data!)
+                .Distinct()         
+                .ToList();
+
+            _db.TaskInformations.RemoveRange(taskInformationsToDelete);
             _db.Tasks.Remove(task);
-            Tasks.Remove(task);
+
+            _db.SaveChanges();
         }
 
-     
+
         public void RemoveProjectUser(ProjectUser projectUser, bool deleteDependencies = true)
         {
             if (projectUser == null) return;

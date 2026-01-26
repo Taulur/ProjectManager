@@ -20,6 +20,9 @@ public partial class Project
     public int TotalTasksCount => Tasks?.Count ?? 0;
 
     [NotMapped]
+    public int TotalProjectUsers => ProjectUsers?.Count ?? 0;
+
+    [NotMapped]
     public int CompletedTasksCount
     {
         get
@@ -60,7 +63,6 @@ public partial class Project
         set
         {
             _currentUser = value;
-            // Если реализуете INotifyPropertyChanged, вызовите OnPropertyChanged
         }
     }
 

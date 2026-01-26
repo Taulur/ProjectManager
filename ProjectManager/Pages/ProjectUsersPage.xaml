@@ -22,9 +22,23 @@
                                 <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding FirstWord}"/>
                             </Border>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical">
-                                <TextBlock Text="{Binding Fullname}"/>
-                                <TextBlock Text="{Binding Username}"/>
-                            </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="👨‍💼 ФИО : "/>
+                            <TextBlock  Text="{Binding Fullname}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="👨‍💼 Username : "/>
+                            <TextBlock  Text="{Binding Username}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📅 Дата создания пользователя: "/>
+                            <TextBlock  Text="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📂 Количество проектов: "/>
+                            <TextBlock  Text="{Binding TotalProjects}"/>
+                        </StackPanel>
+                    </StackPanel>
                             <StackPanel Grid.Column="2" VerticalAlignment="Center">
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <TextBlock Text="👨‍💼"/>
@@ -59,15 +73,28 @@
                         <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Text="{Binding FirstWord}"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical">
-                        <TextBlock Text="{Binding User.Fullname}"/>
-                        <TextBlock Text="{Binding User.Username}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock  Text="👨‍💼 ФИО : "/>
+                            <TextBlock  Text="{Binding User.Fullname}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="👨‍💼 Username : "/>
+                            <TextBlock  Text="{Binding User.Username}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📅 Дата присоединения: "/>
+                            <TextBlock  Text="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   Text="📋 Количество задач: "/>
+                            <TextBlock  Text="{Binding TotalAssignedTasks}"/>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock Text="👨‍💼"/>
                             <TextBlock Text="{Binding Role.Title}"/>
                         </StackPanel>
-
                         <Grid Margin="5" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -127,17 +154,28 @@ IsEditable="True" Margin="0,5"/>
                     <materialDesign:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.75" />
                 </materialDesign:TransitioningContent.OpeningEffects>
                 <Border Style="{StaticResource MainBorder}">
-                    <ScrollViewer MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
-                        <ItemsControl ItemsSource="{Binding ProjectUsers}" ItemTemplate="{StaticResource ProjectUserTemplate}" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel>
+                    <StackPanel>
+                        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                            <TextBox Width="225" x:Name="usersBox"  TextChanged="usersBox_TextChanged" Text="{Binding UsersSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="14" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                            <Border Margin="3" Grid.Row="1" Grid.Column="0" Padding="3" BorderBrush="RoyalBlue" BorderThickness="1" CornerRadius="5"  >
+                                <ComboBox x:Name="usersCombo" SelectionChanged="usersCombo_SelectionChanged" VerticalAlignment="Center" FontSize="12" Width="125" BorderThickness="0" ItemsSource="{Binding UsersFilter}" IsEditable="False" Margin="0,5"/>
+                            </Border>
+                            <Button Height="40" Click="Button_Click"   VerticalAlignment="Center" Margin="3" >
+                                <materialDesign:PackIcon Height="25" Width="25" Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+                        <ScrollViewer MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
+                            <ItemsControl ItemsSource="{Binding ProjectUsers}" ItemTemplate="{StaticResource ProjectUserTemplate}" HorizontalContentAlignment="Stretch">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel>
 
-                                    </StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                        </StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
                 </Border>
             </materialDesign:TransitioningContent>
             <materialDesign:TransitioningContent Grid.Column="1" >
@@ -146,17 +184,25 @@ IsEditable="True" Margin="0,5"/>
                     <materialDesign:TransitionEffect Kind="SlideInFromRight" Duration="0:0:0.75" />
                 </materialDesign:TransitioningContent.OpeningEffects>
                 <Border Grid.Column="1" Style="{StaticResource MainBorder}">
-                    <ScrollViewer  Height="450" Style="{StaticResource HistoryScrollViewer}">
-                        <ItemsControl ItemsSource="{Binding AvailableUsers}" ItemTemplate="{StaticResource UserTemplate}" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel>
+                    <StackPanel>
+                        <StackPanel Margin="3" HorizontalAlignment="Center" Grid.Column="0" Orientation="Horizontal">
+                            <TextBox Width="225" x:Name="usersBox1"  TextChanged="usersBox1_TextChanged" Text="{Binding UsersSearchQuery, UpdateSourceTrigger=PropertyChanged}" FontSize="14" materialDesign:HintAssist.Hint="Введите текст для поиска"/>
+                            <Button Height="40" Click="Button_Click_1"   VerticalAlignment="Center" Margin="3" >
+                                <materialDesign:PackIcon Height="25" Width="25" Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+                        <ScrollViewer  MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
+                            <ItemsControl ItemsSource="{Binding AvailableUsers}" ItemTemplate="{StaticResource UserTemplate}" HorizontalContentAlignment="Stretch">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel>
 
-                                    </StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                        </StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
                 </Border>
             </materialDesign:TransitioningContent>
         </Grid>

@@ -2,9 +2,11 @@
 using ProjectManager.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -16,7 +18,14 @@ namespace ProjectManager.Pages
 
         public Project Project { get; set; }
         public ObservableCollection<ProjectUser> ProjectUsers { get; set; } = new();
-        public ObservableCollection<User> AvailableUsers { get; set; } = new(); 
+        public ObservableCollection<User> AvailableUsers { get; set; } = new();
+
+        public string UsersSearchQuery { get; set; } = null!;
+        public ICollectionView usersView { get; set; }
+        public ObservableCollection<string> UsersFilter { get; set; } = new();
+
+        public string Users1SearchQuery { get; set; } = null!;
+        public ICollectionView usersView1 { get; set; }
 
         public ProjectUsersPage(Project project)
         {
@@ -43,6 +52,38 @@ namespace ProjectManager.Pages
             {
                 ProjectUsers.Add(pu);
             }
+
+            UsersFilter.Add("По дате присоединения");
+            UsersFilter.Add("По количеству задач");
+
+            usersView = CollectionViewSource.GetDefaultView(ProjectUsers);
+            usersView.Filter = FilterUsers;
+        }
+
+        public bool FilterUsers(object obj)
+        {
+            if (obj is not ProjectUser)
+                return false;
+
+            var temp = (ProjectUser)obj;
+
+            if (UsersSearchQuery != null && !temp.User.Fullname.Contains(UsersSearchQuery, StringComparison.CurrentCultureIgnoreCase))
+                return false;
+
+            return true;
+        }
+
+        public bool FilterUsers1(object obj)
+        {
+            if (obj is not User)
+                return false;
+
+            var temp = (User)obj;
+
+            if (UsersSearchQuery != null && !temp.Fullname.Contains(UsersSearchQuery, StringComparison.CurrentCultureIgnoreCase))
+                return false;
+
+            return true;
         }
 
         private void RefreshAvailableUsers()
@@ -59,6 +100,9 @@ namespace ProjectManager.Pages
                     AvailableUsers.Add(user);
                 }
             }
+
+            usersView1 = CollectionViewSource.GetDefaultView(AvailableUsers);
+            usersView1.Filter = FilterUsers1;
         }
 
         private void RoleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -136,6 +180,58 @@ namespace ProjectManager.Pages
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ProjectPage(Project));
+        }
+
+        private void usersBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            usersView.Refresh();
+        }
+
+        private void usersCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            usersView.SortDescriptions.Clear();
+            var cb = (ComboBox)sender;
+            if (cb.SelectedIndex != -1)
+            {
+                var selected = cb.SelectedItem.ToString();
+                if (selected != null && selected != string.Empty)
+                {
+                    switch (selected)
+                    {
+                        case "По количеству задач":
+                            usersView.SortDescriptions.Add(new SortDescription("TotalAssignedTasks",
+                            ListSortDirection.Descending));
+                            break;
+                        case "По дате присоединения":
+                            usersView.SortDescriptions.Add(new SortDescription("CreatedAt",
+                            ListSortDirection.Ascending));
+                            break;
+                    }
+                }
+            }
+            usersView.Refresh();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            usersBox.Text = string.Empty;
+            usersCombo.SelectedIndex = -1;
+            if (UsersSearchQuery != null)
+                UsersSearchQuery = string.Empty;
+            usersView.Refresh();
+        }
+
+        private void usersBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            usersView1.Refresh();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            usersBox1.Text = string.Empty;
+            if (UsersSearchQuery != null)
+                UsersSearchQuery = string.Empty;
+            usersView1.Refresh();
         }
     }
 }

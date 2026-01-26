@@ -115,7 +115,7 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="CornerRadius" Value="15"/>
         <Setter Property="Width" Value="235"/>
-        <Setter Property="Height" Value="225"/>
+        <Setter Property="Height" Value="250"/>
         <Setter Property="Background" Value="White"/>
     </Style>
     
@@ -123,7 +123,7 @@
 
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Height" Value="165"/>
+        <Setter Property="Height" Value="180"/>
         <Setter Property="Background" Value="White"/>
         
     </Style>

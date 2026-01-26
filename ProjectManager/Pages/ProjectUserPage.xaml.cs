@@ -2,9 +2,11 @@
 using ProjectManager.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -20,6 +22,9 @@ namespace ProjectManager.Pages
         public ObservableCollection<Models.Task> WaitingTasks { get; set; } = new();
         public ObservableCollection<Models.Task> ActiveTasks { get; set; } = new();
         public ObservableCollection<Models.Task> CompletedTasks { get; set; } = new();
+
+        public string HistorySearchQuery { get; set; } = null!;
+        public ICollectionView historiesView { get; set; }
 
         public int CommentsCount => Comments?.Count ?? 0;
 
@@ -63,6 +68,9 @@ namespace ProjectManager.Pages
 
             RefreshTasks();
 
+            historiesView = CollectionViewSource.GetDefaultView(TasksHistories);
+            historiesView.Filter = FilterHistories;
+
             InitializeComponent();
 
             ProjectUser currentUser = Models.CurrentUser.ProjectUserByProject(projectUser.Project);
@@ -74,21 +82,40 @@ namespace ProjectManager.Pages
             DataContext = this;
         }
 
+        public bool FilterHistories(object obj)
+        {
+            if (obj is not TasksHistory)
+                return false;
+
+            var temp = (TasksHistory)obj;
+
+            if (HistorySearchQuery != null && !temp.DisplayText.Contains(HistorySearchQuery, StringComparison.CurrentCultureIgnoreCase))
+                return false;
+            return true;
+        }
+
         private void RefreshTasks()
         {
             WaitingTasks.Clear();
             ActiveTasks.Clear();
             CompletedTasks.Clear();
 
-            foreach (var task in ProjectUser.Tasks)
+            var assignedTasks = ProjectUser.TaskInformations
+                .Select(ti => ti.TasksHistories
+                    .OrderByDescending(h => h.CreatedAt)
+                    .FirstOrDefault())
+                .Where(th => th != null)
+                .Select(th => th.Task)
+                .Distinct()                     
+                .ToList();
+
+            foreach (var task in assignedTasks)
             {
                 var status = task.LastVersion?.Data?.Status?.Title;
-                if (status == "Waiting")
-                    WaitingTasks.Add(task);
-                else if (status == "Active")
-                    ActiveTasks.Add(task);
-                else if (status == "Completed")
-                    CompletedTasks.Add(task);
+
+                if (status == "Waiting") WaitingTasks.Add(task);
+                else if (status == "Active") ActiveTasks.Add(task);
+                else if (status == "Completed") CompletedTasks.Add(task);
             }
         }
 
@@ -157,6 +184,19 @@ namespace ProjectManager.Pages
             //    }
             //}
             //projectUsersService.Commit();
+        }
+
+        private void historytBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            historiesView.Refresh();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            historytBox.Text = string.Empty;
+            if (HistorySearchQuery != null)
+                HistorySearchQuery = string.Empty;
+            historiesView.Refresh();
         }
     }
 }

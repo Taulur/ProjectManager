@@ -30,6 +30,10 @@
                         <TextBlock Style="{StaticResource ProjectText}" Text="🎖️ Ваша роль:"  />
                         <TextBlock Style="{StaticResource ProjectValue}" Text="{Binding UserRoleInProject}"  />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ProjectText}" Text="👨‍💼 Количество участников:"  />
+                        <TextBlock Style="{StaticResource ProjectValue}" Text="{Binding TotalProjectUsers}"  />
+                    </StackPanel>
                     <StackPanel HorizontalAlignment="Center"  Orientation="Horizontal">
                         <TextBlock Style="{StaticResource ProjectText}" Text="📋 Задачи:" />
                         <TextBlock Style="{StaticResource ProjectValue}">
@@ -170,7 +174,7 @@
                                 </StackPanel>
 
                             </Grid>
-                            <ScrollViewer Height="500" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
+                            <ScrollViewer MaxHeight="450" Grid.Column="0" Style="{StaticResource ProjectsScrollViewer}">
 
                                 <ItemsControl ItemsSource="{Binding projectsView}" ItemTemplate="{StaticResource ProjectCardTemplate}" HorizontalContentAlignment="Stretch">
 
@@ -212,7 +216,7 @@
                                 </StackPanel>
 
                             </Grid>
-                            <ScrollViewer MaxHeight="400" Style="{StaticResource HistoryScrollViewer}">
+                            <ScrollViewer MaxHeight="450" Style="{StaticResource HistoryScrollViewer}">
                                 <ItemsControl ItemsSource="{Binding ProjectHistories}" ItemTemplate="{StaticResource HistoryTemplate}" HorizontalContentAlignment="Stretch">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>

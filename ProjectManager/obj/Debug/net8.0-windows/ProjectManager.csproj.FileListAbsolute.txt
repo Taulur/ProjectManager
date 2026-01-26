@@ -162,11 +162,9 @@ C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\runtimes\rh
 C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\runtimes\win7-arm\native\libuv.dll
 C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\runtimes\win7-x64\native\libuv.dll
 C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\runtimes\win7-x86\native\libuv.dll
-C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\EditUserPage.g.cs
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\MainPage.g.cs
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\ProjectPage.g.cs
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\UsersPage.g.cs
-C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\EditUserPage.baml
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\MainPage.baml
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\ProjectPage.baml
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\UsersPage.baml
@@ -187,3 +185,5 @@ C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthP
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\Pages\AuthPage.baml
 C:\Учеба\ProjectManager\ProjectManager\bin\Debug\net8.0-windows\ProjectManager.dll.config
 C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditUserWindow.g.cs
+C:\Учеба\ProjectManager\ProjectManager\obj\Debug\net8.0-windows\EditUserWindow.baml
