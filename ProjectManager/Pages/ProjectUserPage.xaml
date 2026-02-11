@@ -5,10 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+            xmlns:converters="clr-namespace:ProjectManager.Converters"
       mc:Ignorable="d" 
        d:DesignHeight="700" d:DesignWidth="1250"
       Title="ProjectUserPage">
     <Page.Resources>
+        <converters:PriorityConverter x:Key="PriorityConverter"/>
+        <converters:StatusConverter x:Key="StatusConverter"/>
+        <converters:RoleConverter x:Key="RoleConverter"/>
         <DataTemplate x:Key="HistoryTemplate">
             <Border Style="{StaticResource HistoryBorder}" MouseLeftButtonDown="HistoryItem_Click" Tag="{Binding}" Cursor="Hand">
                 <Viewbox MaxHeight="25">
@@ -30,7 +34,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock HorizontalAlignment="Center" Margin="3"  Text="🎖️ Имеет роль : "/>
-                                <TextBlock HorizontalAlignment="Center" Margin="3"  Text="{Binding Projectuser.Role.Title}"/>
+                                <TextBlock HorizontalAlignment="Center" Margin="3"  Text="{Binding Projectuser.Role.Title, Converter={StaticResource RoleConverter}}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock HorizontalAlignment="Center" Margin="3"  Text="✔️ Выполнил : "/>
@@ -95,7 +99,7 @@
                             <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10" Padding="3" Margin="3" Background="{Binding ColorByPriority}" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Foreground="White"  Text="⚠️"/>
-                                    <TextBlock FontStyle="Italic" FontWeight="SemiBold" Foreground="White" Text="{Binding LastVersion.Data.Priority.Title}"/>
+                                    <TextBlock FontStyle="Italic" FontWeight="SemiBold" Foreground="White" Text="{Binding LastVersion.Data.Priority.Title, Converter={StaticResource PriorityConverter}}"/>
                                 </StackPanel>
                             </Border>
                             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Background="AliceBlue" HorizontalAlignment="Center"  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
@@ -149,7 +153,7 @@
                     </StackPanel>
                     <StackPanel Grid.Column="2" Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
                         <TextBlock Text="👨‍💼"/>
-                        <TextBlock Text="{Binding Projectuser.Role.Title}"/>
+                        <TextBlock Text="{Binding Projectuser.Role.Title, Converter={StaticResource RoleConverter}}"/>
                     </StackPanel>
                     <Border CornerRadius="10"  Background="White" Padding="2" BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Height="25" >
@@ -216,7 +220,7 @@
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock Text="👨‍💼"/>
-                            <TextBlock Text="{Binding ProjectUser.Role.Title}"/>
+                            <TextBlock Text="{Binding ProjectUser.Role.Title, Converter={StaticResource RoleConverter}}"/>
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
                             <TextBlock  HorizontalAlignment="Center"  Text="📅 Дата присоединения"/>

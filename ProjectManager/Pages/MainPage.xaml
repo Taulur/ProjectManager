@@ -5,12 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:converters="clr-namespace:ProjectManager.Converters"
       mc:Ignorable="d" 
        d:DesignHeight="700" d:DesignWidth="1250"
       Title="MainPage">
-    
+
     <Page.Resources>
-    <DataTemplate x:Key="ProjectCardTemplate">
+        <converters:RoleConverter x:Key="RoleConverter"/>
+        <DataTemplate x:Key="ProjectCardTemplate">
            
                 <Border Style="{StaticResource ProjectBorder}" Cursor="Hand" Tag="{Binding}" MouseLeftButtonDown="OnCardClick">
                 <StackPanel>
@@ -28,7 +30,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource ProjectText}" Text="🎖️ Ваша роль:"  />
-                        <TextBlock Style="{StaticResource ProjectValue}" Text="{Binding UserRoleInProject}"  />
+                        <TextBlock Style="{StaticResource ProjectValue}" Text="{Binding UserRoleInProject, Converter={StaticResource RoleConverter}}"  />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource ProjectText}" Text="👨‍💼 Количество участников:"  />
@@ -51,8 +53,8 @@
                          Maximum="{Binding TotalTasksCount, Mode=OneWay}" />
                     </StackPanel >
                     <StackPanel Margin="0,8,0,0"  Orientation="Horizontal" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
-                        <Button  Content="✏️ Изменить" Width="110" FontSize="12"  Click="EditProject" Tag="{Binding}" Margin="0,0,0,0" Cursor="Hand"/>
-                        <Button  Content="🗑️ Удалить" Width="110 " FontSize="12"  Click="RemoveProject" Tag="{Binding}" Cursor="Hand"/>
+                        <Button x:Name="ChangeButton"  Content="✏️ Изменить" Width="110" FontSize="12"  Click="EditProject" Tag="{Binding}" Margin="0,0,0,0" Cursor="Hand"/>
+                        <Button x:Name="DeleteButton"  Content="🗑️ Удалить" Width="110 " FontSize="12"  Click="RemoveProject" Tag="{Binding}" Cursor="Hand"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -82,7 +84,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock HorizontalAlignment="Center" Margin="3"  Text="🎖️ Имеет роль : "/>
-                                    <TextBlock HorizontalAlignment="Center" Margin="3"  Text="{Binding Projectuser.Role.Title}"/>
+                                <TextBlock HorizontalAlignment="Center" Margin="3"  Text="{Binding Projectuser.Role.Title, Converter={StaticResource RoleConverter}}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock HorizontalAlignment="Center" Margin="3"  Text="✔️ Выполнил : "/>
@@ -233,5 +235,11 @@
                 </materialDesign:TransitioningContent>
             </Grid>
         </StackPanel>
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+                      Grid.Column="1"            
+       HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom"
+                      Margin="16"
+                      MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>
 </Page>

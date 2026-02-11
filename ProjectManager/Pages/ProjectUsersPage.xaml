@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProjectManager.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:converters="clr-namespace:ProjectManager.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1250"
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
@@ -42,7 +43,7 @@
                             <StackPanel Grid.Column="2" VerticalAlignment="Center">
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <TextBlock Text="👨‍💼"/>
-                                    <TextBlock Text="{Binding Systemrole.Title}"/>
+                            <TextBlock Text="{Binding Systemrole.Title, Converter={StaticResource RoleConverter}}"/>
                                 </StackPanel>
 
                                 <Grid Margin="5" VerticalAlignment="Bottom"  HorizontalAlignment="Center">

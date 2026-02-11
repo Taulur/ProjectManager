@@ -9,8 +9,6 @@
       xmlns:val="clr-namespace:ProjectManager.ValidationRules"
       d:DesignHeight="700" d:DesignWidth="1250"
       Title="AuthPage">
-    
-  
     <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -25,7 +23,7 @@
             <StackPanel >
                 <Label Margin="10" Content="📋 Менеджер проектов" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="45"/>
                 <TextBox Margin="10"
-         materialDesign:HintAssist.Hint="Username"
+         materialDesign:HintAssist.Hint="Имя пользователя"
          materialDesign:HintAssist.IsFloating="True"
          materialDesign:ValidationAssist.UsePopup="False"
          materialDesign:ValidationAssist.OnlyShowOnFocus="True"
@@ -38,7 +36,7 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <PasswordBox Margin="10" materialDesign:HintAssist.Hint="Password"  materialDesign:HintAssist.IsFloating="True" FontSize="25"
+                <PasswordBox Margin="10" materialDesign:HintAssist.Hint="Пароль"  materialDesign:HintAssist.IsFloating="True" FontSize="25"
  materialDesign:ValidationAssist.UsePopup="False"
  materialDesign:ValidationAssist.OnlyShowOnFocus="True">
                     <materialDesign:PasswordBoxAssist.Password>

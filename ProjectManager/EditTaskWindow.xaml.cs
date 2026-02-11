@@ -44,15 +44,15 @@ namespace ProjectManager
 
         public int SelectedStatusId
         {
-            get => task?.LastVersion.Data.StatusId ?? 0;
+            get => taskHistory.Data.StatusId ?? 0;
             set
             {
-                if (task == null || value == task?.LastVersion.Data.StatusId) return;
+                if (task == null || value == taskHistory.Data.StatusId) return;
                 var newRole = tasksService.Statuses.FirstOrDefault(r => r.Id == value);
                 if (newRole != null)
                 {
-                    task.LastVersion.Data.Status = newRole;
-                    task.LastVersion.Data.StatusId = newRole.Id;
+                    taskHistory.Data.Status = newRole;
+                    taskHistory.Data.StatusId = newRole.Id;
                     tasksService.Commit();
                 }
             }
@@ -60,16 +60,16 @@ namespace ProjectManager
 
         public int SelectedPriorityId
         {
-            get => task?.LastVersion.Data.PriorityId ?? 0;
+            get => taskHistory.Data.PriorityId ?? 0;
             set
             {
-                if (task == null || value == task?.LastVersion.Data.PriorityId) return;
+                if (task == null || value == taskHistory.Data.PriorityId) return;
 
                 var newRole = tasksService.Priorities.FirstOrDefault(r => r.Id == value);
                 if (newRole != null)
                 {
-                    task.LastVersion.Data.Priority = newRole;
-                    task.LastVersion.Data.PriorityId = newRole.Id;
+                    taskHistory.Data.Priority = newRole;
+                    taskHistory.Data.PriorityId = newRole.Id;
                     tasksService.Commit();
                 }
             }
@@ -103,7 +103,8 @@ namespace ProjectManager
 
                 taskHistory.CreatedAt = task.LastVersion.CreatedAt;
                 isEdit = true;
-
+                selectedUser = task.LastVersion.Data.Assignedto;
+                selectedColor = task.LastVersion.Data.Color;
                 TitleWindow = "Изменение задачи";
 
             }

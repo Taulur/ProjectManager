@@ -66,6 +66,19 @@ namespace ProjectManager.Pages
             DataContext = this;
 
         }
+
+        void Snackbar(string message)
+        {
+            MainSnackbar.MessageQueue?.Enqueue(
+                        message,
+                        null,
+                        null,
+                        null,
+                        false,
+                        true,
+                        TimeSpan.FromSeconds(0.5));
+        }
+
         public bool FilterProjects(object obj)
         {
             if (obj is not Project)
@@ -169,13 +182,23 @@ namespace ProjectManager.Pages
         {
             if (sender is Button button && button.Tag is Project project)
             {
-                var popupWindow = new EditProjectWindow(project);
-                popupWindow.Owner = Window.GetWindow(this);
-                popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                popupWindow.ShowDialog();
+                if (project.UserRoleInProject != "user")
+                {
+                    var popupWindow = new EditProjectWindow(project);
+                    popupWindow.Owner = Window.GetWindow(this);
+                    popupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    popupWindow.ShowDialog();
 
-                DbService.Commit();
-                DbService.LoadUserProjects(CurrentUser);
+                    DbService.Commit();
+                    DbService.LoadUserProjects(CurrentUser);
+                }
+                else
+                {
+                    Snackbar("Вы не имеете достаточно прав для этого действия");
+                }
+
+
+              
 
              
             }
@@ -185,21 +208,30 @@ namespace ProjectManager.Pages
         {
             if (sender is Button button && button.Tag is Project project)
             {
-                var result = MessageBox.Show(
+                if (project.UserRoleInProject != "user")
+                {
+                    var result = MessageBox.Show(
                     $"Удалить проект «{project.Title}»?",
                     "Подтверждение",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
 
-                if (result == MessageBoxResult.Yes)
-                {
+                    if (result == MessageBoxResult.Yes)
+                    {
 
-                    DbService.RemoveProject(project);
-                    DbService.Commit();
-                    DbService.LoadUserProjects(CurrentUser);
+                        DbService.RemoveProject(project);
+                        DbService.Commit();
+                        DbService.LoadUserProjects(CurrentUser);
 
-                   
+
+                    }
                 }
+                else
+                {
+                    Snackbar("Вы не имеете достаточно прав для этого действия");
+                }
+
+                    
             }
         }
 

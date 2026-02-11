@@ -17,9 +17,6 @@ using ProjectManager.Models;
 
 namespace ProjectManager.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для AuthPage.xaml
-    /// </summary>
     public partial class AuthPage : Page
     {
         private DbService data { get; set; } = new();
@@ -60,13 +57,10 @@ namespace ProjectManager.Pages
                         }
                         else
                         {
-                            Snackbar("Неверный пароль");
+                            Snackbar("Неверное имя пользователя или пароль");
                         }
                     }
-                    else
-                    {
-                        Snackbar("Пользователь не найден");
-                    }
+                  
 
                 }
 

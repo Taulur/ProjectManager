@@ -6,9 +6,11 @@
       xmlns:local="clr-namespace:ProjectManager.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
+      xmlns:converters="clr-namespace:ProjectManager.Converters"
       d:DesignHeight="700" d:DesignWidth="1250"
       Title="TeamPage">
     <Page.Resources>
+        <converters:RoleConverter x:Key="RoleConverter"/>
         <DataTemplate x:Key="UserTemplate">
             <Border BorderBrush="Black" BorderThickness="1" Margin="3" Height="85" Background="AliceBlue" CornerRadius="15" Cursor="Hand" Tag="{Binding}">
                 <Grid>
@@ -41,7 +43,7 @@
                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock Text="👨‍💼 Роль: "/>
-                            <TextBlock Text="{Binding Systemrole.Title}"/>
+                            <TextBlock Text="{Binding Systemrole.Title, Converter={StaticResource RoleConverter}}"/>
                         </StackPanel>
                         <Grid Margin="5" VerticalAlignment="Bottom"  HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
